@@ -1,0 +1,10 @@
+.anchor-pane {
+    -fx-background-color: %s;
+}
+.button {
+    -fx-background-color: %s;
+    -fx-text-fill: %s;
+    -fx-border-color: %s;
+    -fx-font-size: %s;
+    -fx-border-radius: 3px;
+}
