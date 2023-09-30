@@ -103,15 +103,15 @@ public class BasicViewModel {
         final double xBegin = Double.parseDouble(minTextField.getText());
         final double xEnd = Double.parseDouble(maxTextField.getText());
         double step = (Math.abs(xBegin) + Math.abs(xEnd)) / 100.0;
-        double scale = Math.pow(10, 7);
 
         graph.getData().clear();
         graph.getData().add(new XYChart.Series<>(FXCollections.observableArrayList()));
         for (double xResult = xBegin; xResult <= xEnd; xResult += step) {
-//            double yResult = basicCalcModel.getResult(expression , Math.ceil(xResult * scale) / scale);
             double yResult = basicCalcModel.getResult(expression , xResult);
             ((XYChart.Series) graph.getData().get(0)).getData().addAll(new XYChart.Data<>(xResult, yResult));
         }
+
+        history.logInfo("Result is graph");
     }
 
     private void calculateResult(final String expression) {

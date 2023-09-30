@@ -10,7 +10,8 @@ public class DataCooker {
     public static String DataCook(String rawData, double xValue) {
         String temp = replaceValueX(rawData, xValue);
         temp = exponentialEntryReplacement(temp);
-        return insertMultiple(temp.replace('.', ','));
+        return temp;
+//        return insertMultiple(temp.replace('.', ','));
     }
 
     private static String insertMultiple(final String inputString) {

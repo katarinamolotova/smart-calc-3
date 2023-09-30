@@ -93,8 +93,8 @@ public class Parser {
     int shiftNumber(String value) {
         boolean isDot = false;
         int result = 0;
-        while (Character.isDigit(value.charAt(result)) || value.charAt(result) == ',' && !isDot) {
-            if (value.charAt(result) == ',') {
+        while (Character.isDigit(value.charAt(result)) || value.charAt(result) == '.' && !isDot) {
+            if (value.charAt(result) == '.') {
                 isDot = true;
             }
             result++;

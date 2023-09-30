@@ -23,25 +23,27 @@ public class CreditCalcModel {
        double sumDynam = sum;
        int data = (periodType == PeriodType.MONTH) ? amountOfMonth : amountOfMonth * 12;
        double res;
+
        for (int i = 0; i < data; i++) {
            if (type == CreditType.ANNUITY) {
-               res = sum * ((percent / 100 / 12) / (Math.pow((1 - (1 + (percent / 100 / 12))),(-1 * data))));
+               res = sum * ((percent / 100. / 12.) / (1. - Math.pow(1. + (percent / 100. / 12.), (-1. * data))));
            } else {
-               res = sum / data + sumDynam * (percent / 100 / 12);
+               res = sum / data + sumDynam * (percent / 100. / 12.);
            }
-           everyMothPay.add(res);
+
+           everyMothPay.add(Math.ceil(res * 100.) / 100.);
            sumDynam -= everyMothPay.get(i);
        }
     }
 
     private void totalPayment() {
-        totalPayment = everyMothPay.get(0);
-        for (int i = 1; i < everyMothPay.size(); i++) {
-            totalPayment = totalPayment + everyMothPay.get(i);
+        for (Double payment : everyMothPay) {
+            totalPayment += payment;
         }
+        totalPayment = Math.ceil(totalPayment * 100) / 100;
     }
 
     private void overpay(double sum) {
-        overpay = totalPayment - sum;
+        overpay = Math.ceil((totalPayment - sum) * 100.) / 100.;
     }
 }

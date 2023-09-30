@@ -60,15 +60,13 @@ public class CreditViewModel implements ChildViewModel {
 
         for (int i = 0; i < monthlyPayment.size(); i++) {
             final String text = monthlyPay.getText();
-            monthlyPay.setText(text + "Месяц " + i + ": " + monthlyPayment.get(i) + "руб.\n");
+            monthlyPay.setText(text + "Месяц " + (i + 1) + ": " + monthlyPayment.get(i) + "руб.\n");
         }
     }
 
     private CreditType getCreditType() {
         RadioButton creditType = (RadioButton) creditCalcType.getSelectedToggle();
-        return Objects.equals(creditType.getText(), CreditType.ANNUITY.getName()) ?
-                CreditType.ANNUITY :
-                CreditType.DIFFERENTIATED;
+        return CreditType.getCreditType(creditType.getText());
     }
 
     private PeriodType getPeriodType() {
