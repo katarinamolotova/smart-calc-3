@@ -34,8 +34,6 @@ public class BasicCalcModelTest {
         Assertions.assertEquals(Math.cos(Math.cos(1)), calc.getResult("cos(cos(1))", 0));
         Assertions.assertEquals(Math.cos(1) + Math.cos(3), calc.getResult("cos(1)+cos(3)", 0));
         Assertions.assertEquals( Math.cos(Math.cos(1) + Math.cos(3)), calc.getResult(" cos(cos(1)+cos(3))", 0));
-
-
     }
 
     @Test
@@ -51,13 +49,34 @@ public class BasicCalcModelTest {
         Assertions.assertEquals(Math.tan(1), calc.getResult("tan(1)", 0));
         Assertions.assertEquals(Math.tan(Math.tan(1)), calc.getResult("tan(tan(1))", 0));
         Assertions.assertEquals(Math.tan(1) + Math.tan(3), calc.getResult("tan(1)+tan(3)", 0));
-        Assertions.assertEquals( Math.tan(Math.tan(1) + Math.tan(3)), calc.getResult(" tan(tan(1)+tan(3))", 0));    }
+        Assertions.assertEquals( Math.tan(Math.tan(1) + Math.tan(3)), calc.getResult(" tan(tan(1)+tan(3))", 0));
+    }
 
     @Test
     public void atan() {
         Assertions.assertEquals(Math.atan(1), calc.getResult("atan(1)", 0));
         Assertions.assertEquals(Math.atan(Math.atan(1)), calc.getResult("atan(atan(1))", 0));
         Assertions.assertEquals(Math.atan(1) + Math.atan(3), calc.getResult("atan(1)+atan(3)", 0));
-        Assertions.assertEquals( Math.atan(Math.atan(1) + Math.atan(3)), calc.getResult(" atan(atan(1)+atan(3))", 0));    }
+        Assertions.assertEquals( Math.atan(Math.atan(1) + Math.atan(3)), calc.getResult(" atan(atan(1)+atan(3))", 0));
+    }
+
+    @Test
+    public void square() {
+        Assertions.assertEquals(Math.sqrt(1), calc.getResult("sqrt(1)", 0));
+        Assertions.assertEquals(Math.sqrt(Math.sqrt(1)), calc.getResult("sqrt(sqrt(1))", 0));
+        Assertions.assertEquals(Math.sqrt(1) + Math.sqrt(3), calc.getResult("sqrt(1)+sqrt(3)", 0));
+        Assertions.assertEquals( Math.sqrt(Math.sqrt(1) + Math.sqrt(3)), calc.getResult(" sqrt(sqrt(1)+sqrt(3))", 0));
+    }
+
+    @Test
+    public void mod() {
+    }
+
+    @Test
+    public void replaceX() {
+        Assertions.assertEquals(13+3+26, calc.getResult("13+x+26", 3));
+        Assertions.assertEquals(Math.pow(3,3) + Math.sqrt(3), calc.getResult("x^x+sqrt(x)", 3));
+        Assertions.assertEquals(Math.pow(3,3), calc.getResult("x^x", 3));
+    }
 }
 
