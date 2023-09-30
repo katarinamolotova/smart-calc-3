@@ -1,11 +1,8 @@
 import edu.school21.model.BasicCalcModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import static java.lang.Float.NaN;
 
 public class BasicCalcModelTest {
     BasicCalcModel calc = new BasicCalcModel();
