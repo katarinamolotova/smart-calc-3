@@ -1,5 +1,9 @@
 package edu.school21.model;
 
+import edu.school21.model.helpers.Calculator;
+import edu.school21.model.helpers.DataCooker;
+import edu.school21.model.helpers.Parser;
+import edu.school21.model.helpers.Validator;
 import javafx.util.Pair;
 import lombok.Getter;
 
@@ -8,14 +12,10 @@ import java.util.Queue;
 
 @Getter
 public class BasicCalcModel {
-    private boolean error;
-    private String result;
-    private String answer;
-
-    public void getResult(final String inputString, final double value) {
+    public double getResult(final String inputString, final double value) {
         Validator.validateData(inputString);
-        result = DataCooker.DataCook(inputString, value);
+        String result = DataCooker.DataCook(inputString, value);
         Queue<Pair<String, Double>> pairs = new Parser().doParsing(result);
-        System.out.println(Calculator.calculate(pairs));
+        return Calculator.calculate(pairs);
     }
 }
