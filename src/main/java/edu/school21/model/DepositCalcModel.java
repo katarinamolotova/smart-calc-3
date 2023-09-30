@@ -1,105 +1,117 @@
 package edu.school21.model;
 
-import edu.school21.model.helpers.Calculator;
-import edu.school21.model.helpers.Parser;
 import javafx.util.Pair;
+import lombok.AllArgsConstructor;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import static edu.school21.model.helpers.Validator.checkForDeposit;
+
+@AllArgsConstructor
 public class DepositCalcModel {
-    boolean checkListAddAndSub(ArrayList<Pair<String, Pair<Integer, Double>>> list) {
+    private double result = 0;
+    private double intermediateSum = 0;
+    private double tempPercent = 0;
+    private int sub_index = 0;
+    private int addIndex = 0;
+    private double add = 0;
+    private double sum = 0;
+    private double sub = 0;
+    private int countPay = 0;
+    private int countCap = 0;
+
+
+    private boolean checkListAddAndSub(ArrayList<Pair<String, Pair<Integer, Double>>> list) {
         boolean result = true;
         try {
-            check_for_deposit(list);
+            checkForDeposit(list);
         } catch (RuntimeException e) {
             result = false;
         }
         return result;
     }
 
-    void check_for_deposit(std::vector<pair<string, pair<int, double>>> list) {
-        for (int i = 0; i < static_cast<int>(list.size()); i++) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (list[j].first == list[i].first &&
-                    list[j].second.first == list[i].second.first)
-                    throw std::invalid_argument("Error: Two additions in one month");
-            }
-        }
+    private double resultPercent(
+            double sum,
+            Pair<String, Integer> amount_of_month,
+            double percent,
+            int capitalisation,
+            int periodPay,
+            int monthStart,
+            ArrayList<Pair<String, Pair<Integer, Double>>> additions,
+            ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal
+    ) {
 
-    double result_procent(string sum, Pair<String, int> amount_of_month, String procent, int capitaliz, int period_pay, String month_start, std::vector<Pair<String, Pair<int, double>>> &additions, std::vector<Pair<String, Pair<int, double>>> &withdrawal) {
-        double result = 0, intermediate_sum = stod(sum), temp_procent = 0;
-        int sub_index = 0, add_index = 0;
-        double add = 0, sub = 0;
-        int data = (amount_of_month.second != 0) ? stoi(amount_of_month.first) * 12 : stoi(amount_of_month.first);
-        for (int i = stoi(month_start), count_cap = 0, count_pay = 0;
-             i < stoi(month_start) + data; i++, count_cap++, count_pay++) {
+        result = 0;
+        intermediateSum = sum;
+        tempPercent = 0;
+        sub_index = 0;
+        addIndex = 0;
+        add = 0;
+
+        int data = (amount_of_month.getValue() != 0) ? Integer.parseInt(amount_of_month.getKey()) * 12 : Integer.parseInt(amount_of_month.getKey());
+        for (int i = monthStart; i < monthStart + data; i++, countCap++, countPay++) {
             int index = (i + 11) % 12;
             int days_in_month = (index == 1) ? 28 : (31 - index % 7 % 2);
-            check_add_list(add_index, index, add, additions);
-            check_sub_list(sub_index, index, sub, withdrawal);
-            check_capitaliz(count_cap, capitaliz, temp_procent, intermediate_sum);
-            check_period_pay(count_pay, period_pay, intermediate_sum, sum);
-            string expression = "(" + std::to_string(intermediate_sum) + "+" + std::to_string(add)
-                    + "-" + std::to_string(sub) + ")/100*" + procent + "*" + std::to_string(days_in_month) + "/365";
+            check_add_list(index, additions);
+            checkSubList(index, withdrawal);
+            checkCapitalisation(capitalisation);
+            checkPeriodPay(periodPay);
 
-            model->parser(expression);
-            model->calculate();
-
-            result += model->answer_;
-            temp_procent += model->answer_;
+            double expression = (intermediateSum + add - sub) / 100d * percent * days_in_month / 365;
+            result += expression;
+            tempPercent += expression;
         }
         return result;
     }
 
-    void check_add_list(int& add_index, int index, double& add,
-                                    std::vector<pair<String, pair<int, double>>> &additions) {
-        if (add_index < static_cast<int>(additions.size()) && index == additions[add_index].second.first) {
-            add += additions[add_index].second.second;
-            add_index++;
+
+    private void check_add_list(int index, ArrayList<Pair<String, Pair<Integer, Double>>> additions) {
+        if (addIndex < additions.size() &&
+            index == additions.get(addIndex).getValue().getKey()) {
+            add += additions.get(addIndex).getValue().getValue();
+            addIndex++;
         }
     }
 
-    void check_sub_list(int& sub_index, int index, double& sub,
-                                    std::vector<pair<String, pair<int, double>>> &withdrawal) {
-        if (sub_index < static_cast<int>(withdrawal.size()) && index == withdrawal[sub_index].second.first) {
-            sub += withdrawal[sub_index].second.second;
+    private void checkSubList(int index, ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal) {
+        if (sub_index < withdrawal.size() && index == withdrawal.get(sub_index).getValue().getKey()) {
+            sub += withdrawal.get(sub_index).getValue().getValue();
             sub_index++;
         }
     }
 
-    void check_capitaliz(int count_cap, int capitaliz, double temp_procent,
-                                     double intermediate_sum) {
-//        if (count_cap == capitaliz && capitaliz) {
-            intermediate_sum += temp_procent;
-            count_cap = 0;
-            temp_procent = 0;
-//        }
+    private void checkCapitalisation(int capitalisation) {
+        if (countCap == capitalisation && capitalisation != 0) {
+            intermediateSum += tempPercent;
+            countCap = 0;
+            tempPercent = 0;
+        }
     }
 
-    void check_period_pay(int countPay, int periodPay, double intermediateSum, String sum) {
-//        if (countPay == periodPay && periodPay) {
-            intermediateSum = Double.parseDouble(sum);
+    private void checkPeriodPay(int periodPay) {
+        if (countPay == periodPay && periodPay != 0) {
+            intermediateSum = sum;
             countPay = 0;
-//        }
+        }
     }
 
-    double sum_at_the_end(String sumBegin, double resultProcent, ArrayList<Pair<String, Pair<Integer, Double>>> additions, ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal) {
-        String expression = sumBegin + "+" + resultProcent;
-        double result = Calculator.calculate(new Parser().doParsing(expression));
+    private double sumAtTheEnd(double sumBegin,
+                       double resultPercent,
+                       ArrayList<Pair<String, Pair<Integer, Double>>> additions,
+                       ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal) {
 
-//        for (int it = additions.begin(); it != additions.end(); it++)
-//            result += it->second.second;
-//        for (int it = withdrawal.begin(); it != withdrawal.end(); it++)
-//            result -= it->second.second;
-
+        double result = sumBegin + resultPercent;
+        for (Pair<String, Pair<Integer, Double>> i : additions) {
+            result += i.getValue().getValue();
+        }
+        for (Pair<String, Pair<Integer, Double>> i : withdrawal) {
+            result -= i.getValue().getValue();
+        }
         return result;
     }
 
-    double sum_nalog(string nalog_procent, double result_procent) {
-        string expression = std::to_string(result_procent) + "*(" + nalog_procent + "/100)";
-        model->parser(expression);
-        model->calculate();
-        return model->answer_;
+    private double sumTax(double taxPercent, double resultPercent) {
+        return resultPercent * (taxPercent / 100);
     }
 }

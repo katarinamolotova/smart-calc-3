@@ -1,8 +1,9 @@
 package edu.school21.model.helpers;
 
+import javafx.util.Pair;
 import lombok.AllArgsConstructor;
-
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Objects;
 
 @AllArgsConstructor
 public class Validator {
@@ -26,6 +27,16 @@ public class Validator {
         for (int i = 0; i < rawData.length(); i++) {
             if (rawData.charAt(i) == '(' && rawData.charAt(i+1) == ')') {
                 throw new IllegalArgumentException("Empty branch");
+            }
+        }
+    }
+
+    public static void checkForDeposit(ArrayList<Pair<String, Pair<Integer, Double>>> list) {
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (Objects.equals(list.get(j).getKey(), list.get(i).getKey()) &&
+                    Objects.equals(list.get(j).getValue().getKey(), list.get(i).getValue().getKey()))
+                    throw new IllegalArgumentException("Error: Two additions in one month");
             }
         }
     }
