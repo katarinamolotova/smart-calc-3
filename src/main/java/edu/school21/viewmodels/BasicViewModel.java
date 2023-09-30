@@ -2,7 +2,9 @@ package edu.school21.viewmodels;
 
 import edu.school21.enums.RotationPeriod;
 import edu.school21.enums.ScreenType;
+import edu.school21.model.BasicCalcModel;
 import edu.school21.viewmodels.handlers.History;
+import edu.school21.viewmodels.handlers.Settings;
 import edu.school21.viewmodels.handlers.WindowManager;
 import edu.school21.viewmodels.helpers.Validator;
 import javafx.event.ActionEvent;
@@ -31,7 +33,11 @@ public class BasicViewModel {
     private WindowManager windowManager;
     private History history;
 
-    public void initialize(Stage stage) {
+    private BasicCalcModel basicCalcModel;
+
+    public void initialize(final Stage stage) {
+        basicCalcModel = new BasicCalcModel();
+
         history = new History(listHistory);
         history.loadHistoryFromFile();
         setRadioMenuItemRotationPeriodSelected(RotationPeriod.valueOf(history.getLoggerName()));
@@ -52,7 +58,7 @@ public class BasicViewModel {
     }
 
     @FXML
-    public void clickOnTextButton(ActionEvent event) {
+    public void clickOnTextButton(final ActionEvent event) {
         final Button button = (Button) event.getSource();
         final String text = calcTextArea.getText();
         calcTextArea.setText(text + button.getText());
@@ -72,13 +78,45 @@ public class BasicViewModel {
 
     @FXML
     public void clickOnEqualsButton() {
-        history.addExpressionToHistory(calcTextArea.getText());
-        //  вызов модели
+        final String expression = calcTextArea.getText();
+        history.addExpressionToHistory(expression);
+        try {
+            if (graphCheckBox.isSelected()) {
+                drawGraph(expression);
+            } else {
+                calculateResult(expression);
+            }
+        } catch (final Exception e) {
+            final String message = e.getMessage();
+            history.logError(message);
+            windowManager.showErrorMessage(message);
+        }
+    }
+
+    private void drawGraph(final String expression) {
+
+    }
+
+    private void calculateResult(final String expression) {
+        double result = basicCalcModel.getResult(expression , Double.parseDouble(maxTextField.getText()));
+        history.logInfo(String.format("Result is %f", result));
+        calcTextArea.setText(String.valueOf(result));
+    }
+
+    @FXML
+    public void checkGraphBox() {
+        changeVisibleForGraphElements(graphCheckBox.isSelected());
+    }
+
+    private void changeVisibleForGraphElements(final boolean visible) {
+        maxLabel.setVisible(visible);
+        minLabel.setVisible(visible);
+        minTextField.setVisible(visible);
     }
 
     @FXML
     public void chooseItemFromHistory(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+        if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == 2) {
             calcTextArea.setText(history.getSelectedItem());
         }
     }
@@ -94,7 +132,7 @@ public class BasicViewModel {
         history.changeLoggerByRotationPeriod(RotationPeriod.valueOf(radioMenuItem.getText().toUpperCase()));
     }
     
-    private void setRadioMenuItemRotationPeriodSelected(RotationPeriod rotationPeriod) {
+    private void setRadioMenuItemRotationPeriodSelected(final RotationPeriod rotationPeriod) {
         if (rotationPeriod == RotationPeriod.MINUTELY) {
             minutelyRadioItem.isSelected();
         } else if (rotationPeriod == RotationPeriod.HOURLY) {
@@ -104,19 +142,6 @@ public class BasicViewModel {
         } else if (rotationPeriod == RotationPeriod.MONTHLY) {
             monthlyRadioItem.isSelected();
         }
-    }
-
-    //  graph handler
-
-    @FXML
-    public void checkGraphBox() {
-        changeVisibleForGraphElements(graphCheckBox.isSelected());
-    }
-
-    private void changeVisibleForGraphElements(final boolean visible) {
-        maxLabel.setVisible(visible);
-        minLabel.setVisible(visible);
-        minTextField.setVisible(visible);
     }
 
     @FXML

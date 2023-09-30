@@ -6,16 +6,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WindowManager {
 
-    public AnchorPane anchorPane;
+    private AnchorPane anchorPane;
     private Stage basicStage;
     private Stage aboutStage;
     private Stage creditStage;
@@ -27,6 +30,7 @@ public class WindowManager {
     private SettingsViewModel settingsViewModel;
 
     private final Settings settings;
+    private final Logger log = LogManager.getRootLogger();
 
     private ScreenType currentType = ScreenType.BASIC;
 
@@ -79,18 +83,27 @@ public class WindowManager {
             newStage.initOwner(basicStage);
         }
         currentType = newType;
-        assert oldStage != null;
-        oldStage.hide();
-        newStage.show();
+        if (oldStage != null) {
+            oldStage.hide();
+            newStage.show();
+        }
+    }
+
+    public void showErrorMessage(final String message) {
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
      * Закрывает все приложение, если было закрыто одно из основных окон
      */
     public void closeWindow() {
-        Stage stage = getStageByScreenType(currentType);
-        assert stage != null;
-        stage.close();
+        final Stage stage = getStageByScreenType(currentType);
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     public void closeSettingsViewAndUpdate() {
@@ -125,16 +138,18 @@ public class WindowManager {
     public void updateStyle() {
         settings.setStyleSheetFromSettings();
 
-        ObservableList<String> currentStyle = anchorPane.getStylesheets();
+        final ObservableList<String> currentStyle = anchorPane.getStylesheets();
         anchorPane.getStylesheets().removeAll(currentStyle);
         anchorPane.getStylesheets().add(Settings.STYLESHEET_FILE_NAME);
+
+//        anchorPane.setStyle("-fx-background-color: #ffff00;");
 
         updateChildStyleIfNotNull(settingsViewModel);
         updateChildStyleIfNotNull(creditViewModel);
         updateChildStyleIfNotNull(depositViewModel);
     }
 
-    private void updateChildStyleIfNotNull(ChildViewModel viewModel) {
+    private void updateChildStyleIfNotNull(final ChildViewModel viewModel) {
         if (viewModel != null) {
             viewModel.updateStyle();
         }
@@ -148,9 +163,8 @@ public class WindowManager {
 
         try {
             root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            closeWindow();
+        } catch (final IOException e) {
+            showErrorMessage(e.getMessage());
         }
 
         final ChildViewModel viewModel = loader.getController();
@@ -167,7 +181,7 @@ public class WindowManager {
         return stage;
     }
 
-    private void setStageByScreenType(ScreenType type, Stage stage) {
+    private void setStageByScreenType(final ScreenType type, final Stage stage) {
         if (type == ScreenType.CREDIT) {
             creditStage = stage;
         } else if (type == ScreenType.DEPOSIT) {

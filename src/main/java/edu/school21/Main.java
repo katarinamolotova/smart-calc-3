@@ -2,12 +2,15 @@ package edu.school21;
 
 import edu.school21.enums.ScreenType;
 import edu.school21.viewmodels.BasicViewModel;
+import edu.school21.viewmodels.handlers.Settings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 
 public class Main extends Application {
@@ -19,20 +22,25 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         final URL url = getClass().getResource(ScreenType.BASIC.getFileName());
 
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
-        final Parent root = loader.load();
+        try {
+            final Parent root = loader.load();
+            stage.setScene(new Scene(root));
+        } catch (final Exception e) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
 
-        stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.setTitle(ScreenType.BASIC.getTitle());
-
         viewModel = loader.getController();
         viewModel.initialize(stage);
-
         stage.show();
     }
 

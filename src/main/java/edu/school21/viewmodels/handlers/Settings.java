@@ -7,29 +7,24 @@ import java.io.*;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-// синглтон
 public class Settings {
     public static final String STYLESHEET_FILE_NAME = "settings/settings.css";
     private static final String STYLE_TEMPLATE_FILE_NAME = "settings/settings_template.txt";
     private static final String STYLE_SETTINGS_FILE_NAME = "settings/settings.properties";
 
-    private final ClassLoader classLoader;
     private final Properties properties;
     private String styleTemplate;
 
     public Settings() {
-        classLoader = Main.class.getClassLoader();
-        final InputStream stream = classLoader.getResourceAsStream(STYLE_SETTINGS_FILE_NAME);
         properties = new Properties();
         try {
+            final InputStream stream = new FileInputStream(STYLE_SETTINGS_FILE_NAME);
             properties.load(stream);
-            final FileReader fileReader = new FileReader(classLoader.getResource(STYLE_TEMPLATE_FILE_NAME).getPath());
+            final FileReader fileReader = new FileReader(STYLE_TEMPLATE_FILE_NAME);
             final BufferedReader reader = new BufferedReader(fileReader);
             styleTemplate = reader.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (final IOException e) {
-            final Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getMessage());
-            alert.show();
+            showAlertErrorWindow(e.getMessage());
         }
     }
 
@@ -67,26 +62,23 @@ public class Settings {
         properties.setProperty("fx.button.font.size", buttonFontSize);
     }
 
-    // подумать
     public void setStyleSheetFromSettings() {
-        String style = getStyleFromProperties();
+        final String style = getStyleFromProperties();
         try {
-            final FileWriter fileWriter = new FileWriter(classLoader.getResource(STYLESHEET_FILE_NAME).getPath());
+            final FileWriter fileWriter = new FileWriter(STYLESHEET_FILE_NAME);
             fileWriter.write(style);
             fileWriter.close();
         } catch (final IOException e) {
-            final Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getMessage());
-            alert.show();
+            showAlertErrorWindow(e.getMessage());
         }
     }
 
     public void savePropertiesToFile()  {
         try {
-            OutputStream out = new FileOutputStream(classLoader.getResource(STYLE_SETTINGS_FILE_NAME).getPath());
+            final OutputStream out = new FileOutputStream(STYLE_SETTINGS_FILE_NAME);
             properties.store(out, "Application settings");
         } catch (final IOException e) {
-            e.printStackTrace();
+            showAlertErrorWindow(e.getMessage());
         }
     }
 
@@ -99,5 +91,12 @@ public class Settings {
                 getButtonTextColor(),
                 getButtonFontSize()
         );
+    }
+
+    private void showAlertErrorWindow(final String message) {
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -1,6 +1,5 @@
 package edu.school21.viewmodels.handlers;
 
-import edu.school21.Main;
 import edu.school21.enums.RotationPeriod;
 import edu.school21.viewmodels.handlers.wrappers.HistoryWrapper;
 import javafx.collections.FXCollections;
@@ -12,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.*;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,23 +20,23 @@ import java.util.List;
 
 public class History {
     private static final Integer MAX_HISTORY_COUNT = 10;
-    private static final String HISTORY_FILE_NAME = "history.xml";
+    private static final String HISTORY_FILE_NAME = "history/history.xml";
     private final ObservableList<String> history = FXCollections.observableArrayList();
     private final MultipleSelectionModel<String> historySelectionModel;
-    private final ClassLoader classLoader;
+
+    private static final Logger rootLog = LogManager.getRootLogger();
     private static Logger log;
 
-    public History(ListView<String> listHistory) {
+    public History(final ListView<String> listHistory) {
         listHistory.setItems(history);
         historySelectionModel = listHistory.getSelectionModel();
-        classLoader = Main.class.getClassLoader();
     }
 
     public String getSelectedItem() {
         return historySelectionModel.getSelectedItem();
     }
 
-    public void addExpressionToHistory(String expression) {
+    public void addExpressionToHistory(final String expression) {
         if (history.size() == MAX_HISTORY_COUNT) {
             history.remove(MAX_HISTORY_COUNT - 1);
         }
@@ -48,6 +48,17 @@ public class History {
         history.clear();
     }
 
+    public void logError(final String message) {
+        log.error(message);
+    }
+
+    public void logInfo(final String message) {
+        log.info(message);
+    }
+
+    /**
+     * Возвращает имя логера в верхнем регистре
+     */
     public String getLoggerName() {
         return log.getName().toUpperCase();
     }
@@ -66,20 +77,20 @@ public class History {
      */
     public void loadHistoryFromFile() {
         try {
-            JAXBContext context = JAXBContext.newInstance(HistoryWrapper.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
+            final JAXBContext context = JAXBContext.newInstance(HistoryWrapper.class);
+            final Unmarshaller unmarshaller = context.createUnmarshaller();
 
-            final InputStream stream = classLoader.getResourceAsStream(HISTORY_FILE_NAME);
-            HistoryWrapper historyWrapper = (HistoryWrapper) unmarshaller.unmarshal(stream);
+            final InputStream stream = new FileInputStream(HISTORY_FILE_NAME);
+            final HistoryWrapper historyWrapper = (HistoryWrapper) unmarshaller.unmarshal(stream);
 
-            List<String> data = historyWrapper.getHistory();
+            final List<String> data = historyWrapper.getHistory();
             if (data != null) {
                 clear();
                 history.addAll(data);
             }
             log = LogManager.getLogger(historyWrapper.getPeriodRotation());
-        } catch (JAXBException e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            rootLog.debug(e.getMessage());
             showAlertErrorWindow("Could not load data from resource " + HISTORY_FILE_NAME);
         }
     }
@@ -89,23 +100,24 @@ public class History {
      */
     public void saveHistoryToFile() {
         try {
-            JAXBContext context = JAXBContext.newInstance(HistoryWrapper.class);
-            Marshaller marshaller = context.createMarshaller();
+            final JAXBContext context = JAXBContext.newInstance(HistoryWrapper.class);
+            final Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            HistoryWrapper historyWrapper = new HistoryWrapper();
+            final HistoryWrapper historyWrapper = new HistoryWrapper();
             historyWrapper.setHistory(new ArrayList<>(history));
             historyWrapper.setPeriodRotation(log.getName());
 
-            OutputStream out = new FileOutputStream(classLoader.getResource(HISTORY_FILE_NAME).getPath());
+            final OutputStream out = new FileOutputStream(HISTORY_FILE_NAME);
             marshaller.marshal(historyWrapper, out);
-        } catch (Exception e) {
+        } catch (final Exception e) {
+            rootLog.debug(e.getMessage());
             showAlertErrorWindow("Could not save data to resource " + HISTORY_FILE_NAME);
         }
     }
 
     private void showAlertErrorWindow(final String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(message);
         alert.showAndWait();
