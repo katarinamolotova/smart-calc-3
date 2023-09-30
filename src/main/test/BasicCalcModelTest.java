@@ -2,30 +2,57 @@ import edu.school21.model.BasicCalcModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static java.lang.Float.NaN;
+
 public class BasicCalcModelTest {
     BasicCalcModel calc = new BasicCalcModel();
 
+    private static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     @Test
     public void addition() {
-        Assertions.assertEquals( 100+200+300.0+123, calc.getResult("100+200+300.0+123", 0));
-        Assertions.assertEquals( 100+9999.1+3213+123.12312, calc.getResult("100+9999.1+3213+123.12312", 0));
-        Assertions.assertEquals( 100+(9999.1+(3213+123.12312)), calc.getResult("100+(9999.1+(3213+123.12312))", 0));
-        Assertions.assertEquals( 100+(9999.1+(3213+(123.12312))), calc.getResult("100+(9999.1+(3213+(123.12312)))", 0));
+        Assertions.assertEquals( round(100+200+300.0+123, 10),
+                calc.getResult("100+200+300.0+123", 0));
+        Assertions.assertEquals( round(100+9999.1+3213+123.12312, 10),
+                calc.getResult("100+9999.1+3213+123.12312", 0));
+        Assertions.assertEquals( round(100+(9999.1+(3213+123.12312)), 10),
+                calc.getResult("100+(9999.1+(3213+123.12312))", 0));
+        Assertions.assertEquals( round(100+(9999.1+(3213+(123.12312))), 10),
+                calc.getResult("100+(9999.1+(3213+(123.12312)))", 0));
     }
 
     @Test
     public void degree() {
-        Assertions.assertEquals( Math.pow(3, 3), calc.getResult("3^3", 0));
-        Assertions.assertEquals( Math.pow(Math.pow(2, 3), 3), calc.getResult("2^3^3", 0));
-        Assertions.assertEquals( 3 * Math.pow(3, 3), calc.getResult("3*3^3", 0));
+        Assertions.assertEquals(Math.pow(3, 3), calc.getResult("3^3", 0));
+        Assertions.assertEquals(Math.pow(Math.pow(2, 3), 3), calc.getResult("2^3^3", 0));
+        Assertions.assertEquals( 3 + Math.pow(3, 3), calc.getResult("3+3^3", 0));
     }
 
     @Test
     public void subtraction() {
-        Assertions.assertEquals( 100-200-300.0-123, calc.getResult("100-200-300.0-123", 0));
-        Assertions.assertEquals( 100-9999.1-3213-123.12312, calc.getResult("100-9999.1-3213-123.12312", 0));
-        Assertions.assertEquals( 100-(9999.1-(3213-123.12312)), calc.getResult("100-(9999.1-(3213-123.12312))", 0));
-        Assertions.assertEquals( 100-(9999.1-(3213-(123.12312))), calc.getResult("100-(9999.1-(3213-(123.12312)))", 0));
+        Assertions.assertEquals(
+                round(100-200-300.0-123, 10),
+                calc.getResult("100-200-300.0-123", 0));
+
+        Assertions.assertEquals(
+                round(100-9999.1-3213-123.12312, 10),
+                calc.getResult("100-9999.1-3213-123.12312", 0));
+
+        Assertions.assertEquals(
+                round(100-(9999.1-(3213-123.12312)), 10),
+                calc.getResult("100-(9999.1-(3213-123.12312))", 0));
+
+        Assertions.assertEquals(
+                round(100-(9999.1-(3213-(123.12312))), 10),
+                calc.getResult("100-(9999.1-(3213-(123.12312)))", 0));
     }
 
     @Test
@@ -69,14 +96,24 @@ public class BasicCalcModelTest {
     }
 
     @Test
-    public void mod() {
-    }
-
-    @Test
     public void replaceX() {
         Assertions.assertEquals(13+3+26, calc.getResult("13+x+26", 3));
         Assertions.assertEquals(Math.pow(3,3) + Math.sqrt(3), calc.getResult("x^x+sqrt(x)", 3));
         Assertions.assertEquals(Math.pow(3,3), calc.getResult("x^x", 3));
+    }
+
+    @Test
+    public void mod() {
+    }
+
+    @Test
+    public void log() {
+    }
+
+    @Test
+    public void megaTests() {
+        Assertions.assertEquals(344378539330472184817647616.000000, calc.getResult("14^23/6*9+5-1+(56*2)", 0));
+        Assertions.assertEquals(NaN, calc.getResult("cos(45)+sin(45)+tan(45)+acos(45)+asin(45)+atan(45)+sqrt(45)+ln(45)+log(45)", 3));
     }
 }
 
