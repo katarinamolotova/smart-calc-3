@@ -8,14 +8,26 @@ import javafx.util.Pair;
 import lombok.Getter;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Queue;
 
 @Getter
 public class BasicCalcModel {
+    static final int AROUNDVAR = 10;
+
     public double getResult(final String inputString, final double value) {
         Validator.validateData(inputString);
         String result = DataCooker.DataCook(inputString, value);
         Queue<Pair<String, Double>> pairs = new Parser().doParsing(result);
-        return Calculator.calculate(pairs);
+        return round(Calculator.calculate(pairs));
+    }
+
+    private static double round(double value) {
+        if (AROUNDVAR < 0) throw new IllegalArgumentException();
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
