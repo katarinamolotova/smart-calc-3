@@ -108,7 +108,8 @@ public class BasicViewModel {
         graph.getData().clear();
         graph.getData().add(new XYChart.Series<>(FXCollections.observableArrayList()));
         for (double xResult = xBegin; xResult <= xEnd; xResult += step) {
-            double yResult = basicCalcModel.getResult(expression , Math.ceil(xResult * scale) / scale);
+//            double yResult = basicCalcModel.getResult(expression , Math.ceil(xResult * scale) / scale);
+            double yResult = basicCalcModel.getResult(expression , xResult);
             ((XYChart.Series) graph.getData().get(0)).getData().addAll(new XYChart.Data<>(xResult, yResult));
         }
     }

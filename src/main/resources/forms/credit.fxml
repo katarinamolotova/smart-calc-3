@@ -28,7 +28,7 @@
       <Label layoutX="14.0" layoutY="454.0" text="Общая выплата:" />
       <Label layoutX="333.0" layoutY="454.0" text="руб." />
       <Label layoutX="333.0" layoutY="414.0" text="руб." />
-      <TextArea fx:id="monthlyPay" editable="false" layoutX="166.0" layoutY="242.0" prefHeight="153.0" prefWidth="160.0" />
+      <TextArea fx:id="monthlyPay" editable="false" layoutX="166.0" layoutY="242.0" prefHeight="153.0" prefWidth="259.0" />
       <TextField fx:id="overPay" editable="false" layoutX="166.0" layoutY="409.0" text="0" />
       <TextField fx:id="totalPayment" editable="false" layoutX="166.0" layoutY="449.0" text="0" />
 

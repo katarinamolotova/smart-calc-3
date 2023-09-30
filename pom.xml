@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.school21</groupId>
-    <artifactId>SmartCalc3</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>SmartCalc</artifactId>
+    <version>3.0</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -86,24 +86,6 @@
             <version>${junit.platform.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-graphics</artifactId>-->
-<!--            <version>19.0.2.1</version>-->
-<!--            <classifier>win</classifier>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-graphics</artifactId>-->
-<!--            <version>19.0.2.1</version>-->
-<!--            <classifier>linux</classifier>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-graphics</artifactId>-->
-<!--            <version>19.0.2.1</version>-->
-<!--            <classifier>mac</classifier>-->
-<!--        </dependency>-->
     </dependencies>
 
 
@@ -114,15 +96,6 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
                 <configuration>
-<!--                    <executable>/Users/chastity/Library/Java/JavaVirtualMachines/liberica-11.0.20.1/bin/java</executable>-->
-<!--                    <jlinkExecutable>/Users/chastity/Library/Java/JavaVirtualMachines/liberica-11.0.20.1/bin/jlink</jlinkExecutable>-->
-<!--                    <stripDebug>true</stripDebug>-->
-<!--                    <compress>2</compress>-->
-<!--                    <noHeaderFiles>true</noHeaderFiles>-->
-<!--                    <noManPages>true</noManPages>-->
-<!--                    <launcher>SmartCalc3</launcher>-->
-<!--                    <jlinkImageName>SmartCalc3</jlinkImageName>-->
-<!--                    <jlinkZipName>SmartCalc3zip</jlinkZipName>-->
                     <mainClass>edu.school21.Main</mainClass>
                 </configuration>
             </plugin>

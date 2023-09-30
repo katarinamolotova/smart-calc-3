@@ -60,7 +60,7 @@ public class CreditViewModel implements ChildViewModel {
 
         for (int i = 0; i < monthlyPayment.size(); i++) {
             final String text = monthlyPay.getText();
-            monthlyPay.setText(text + "Месяц " + i + " - " + monthlyPayment.get(i) + "\n");
+            monthlyPay.setText(text + "Месяц " + i + ": " + monthlyPayment.get(i) + "руб.\n");
         }
     }
 
