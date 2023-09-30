@@ -1,11 +1,8 @@
 import edu.school21.model.BasicCalcModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import static java.lang.Float.NaN;
 
 public class BasicCalcModelTest {
     BasicCalcModel calc = new BasicCalcModel();
@@ -28,6 +25,10 @@ public class BasicCalcModelTest {
                 calc.getResult("100+(9999.1+(3213+123.12312))", 0));
         Assertions.assertEquals( round(100+(9999.1+(3213+(123.12312)))),
                 calc.getResult("100+(9999.1+(3213+(123.12312)))", 0));
+        Assertions.assertEquals(round(0.999999+0.000001),
+                calc.getResult("0.999999+0.000001", 0));
+        Assertions.assertEquals(round(0.99999999+0.000001),
+                calc.getResult("0.99999999+0.000001", 0));
     }
 
     @Test
@@ -108,13 +109,20 @@ public class BasicCalcModelTest {
     }
 
     @Test
+    public void ln() {
+        Assertions.assertEquals(round(Math.log(45)), calc.getResult("ln(45)", 3));
+    }
+
+    @Test
     public void log() {
+        Assertions.assertEquals(round(Math.log10(45)), calc.getResult("log(45)", 3));
     }
 
     @Test
     public void megaTests() {
         Assertions.assertEquals(344378539330472184817647616.000000, calc.getResult("14^23/6*9+5-1+(56*2)", 0));
-        Assertions.assertEquals(NaN, calc.getResult("cos(45)+sin(45)+tan(45)+acos(45)+asin(45)+atan(45)+sqrt(45)+ln(45)+log(45)", 3));
+        Assertions.assertEquals(1.3762255134, calc.getResult("cos(45)+sin(45)", 3));
+        Assertions.assertEquals(12.168078936, calc.getResult("sqrt(45)+ln(45)+log(45)", 10));
     }
 }
 
