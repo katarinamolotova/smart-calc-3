@@ -27,6 +27,8 @@ public class BasicCalcModelTest {
                 calc.getResult("100+(9999.1+(3213+(123.12312)))", 0));
         Assertions.assertEquals(round(0.999999+0.000001),
                 calc.getResult("0.999999+0.000001", 0));
+        Assertions.assertEquals(round(0.99999999+0.000001),
+                calc.getResult("0.99999999+0.000001", 0));
     }
 
     @Test
