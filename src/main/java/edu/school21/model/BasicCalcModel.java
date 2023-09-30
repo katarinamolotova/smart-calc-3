@@ -15,17 +15,19 @@ import java.util.Queue;
 
 @Getter
 public class BasicCalcModel {
+    static final int AROUNDVAR = 10;
+
     public double getResult(final String inputString, final double value) {
         Validator.validateData(inputString);
         String result = DataCooker.DataCook(inputString, value);
         Queue<Pair<String, Double>> pairs = new Parser().doParsing(result);
-        return round(Calculator.calculate(pairs), 10);
+        return round(Calculator.calculate(pairs));
     }
 
-    private static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+    private static double round(double value) {
+        if (AROUNDVAR < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
 }

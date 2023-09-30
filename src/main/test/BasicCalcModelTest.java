@@ -9,23 +9,24 @@ import static java.lang.Float.NaN;
 
 public class BasicCalcModelTest {
     BasicCalcModel calc = new BasicCalcModel();
+    static final int AROUNDVAR = 10;
 
-    private static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+    private static double round(double value) {
+        if (AROUNDVAR < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
 
     @Test
     public void addition() {
-        Assertions.assertEquals( round(100+200+300.0+123, 10),
+        Assertions.assertEquals( round(100+200+300.0+123),
                 calc.getResult("100+200+300.0+123", 0));
-        Assertions.assertEquals( round(100+9999.1+3213+123.12312, 10),
+        Assertions.assertEquals( round(100+9999.1+3213+123.12312),
                 calc.getResult("100+9999.1+3213+123.12312", 0));
-        Assertions.assertEquals( round(100+(9999.1+(3213+123.12312)), 10),
+        Assertions.assertEquals( round(100+(9999.1+(3213+123.12312))),
                 calc.getResult("100+(9999.1+(3213+123.12312))", 0));
-        Assertions.assertEquals( round(100+(9999.1+(3213+(123.12312))), 10),
+        Assertions.assertEquals( round(100+(9999.1+(3213+(123.12312)))),
                 calc.getResult("100+(9999.1+(3213+(123.12312)))", 0));
     }
 
@@ -39,67 +40,67 @@ public class BasicCalcModelTest {
     @Test
     public void subtraction() {
         Assertions.assertEquals(
-                round(100-200-300.0-123, 10),
+                round(100-200-300.0-123),
                 calc.getResult("100-200-300.0-123", 0));
 
         Assertions.assertEquals(
-                round(100-9999.1-3213-123.12312, 10),
+                round(100-9999.1-3213-123.12312),
                 calc.getResult("100-9999.1-3213-123.12312", 0));
 
         Assertions.assertEquals(
-                round(100-(9999.1-(3213-123.12312)), 10),
+                round(100-(9999.1-(3213-123.12312))),
                 calc.getResult("100-(9999.1-(3213-123.12312))", 0));
 
         Assertions.assertEquals(
-                round(100-(9999.1-(3213-(123.12312))), 10),
+                round(100-(9999.1-(3213-(123.12312)))),
                 calc.getResult("100-(9999.1-(3213-(123.12312)))", 0));
     }
 
     @Test
     public void cos() {
-        Assertions.assertEquals(Math.cos(1), calc.getResult("cos(1)", 0));
-        Assertions.assertEquals(Math.cos(Math.cos(1)), calc.getResult("cos(cos(1))", 0));
-        Assertions.assertEquals(Math.cos(1) + Math.cos(3), calc.getResult("cos(1)+cos(3)", 0));
-        Assertions.assertEquals( Math.cos(Math.cos(1) + Math.cos(3)), calc.getResult(" cos(cos(1)+cos(3))", 0));
+        Assertions.assertEquals(round(Math.cos(1)), calc.getResult("cos(1)", 0));
+        Assertions.assertEquals(round(Math.cos(Math.cos(1))), calc.getResult("cos(cos(1))", 0));
+        Assertions.assertEquals(round(Math.cos(1) + Math.cos(3)), calc.getResult("cos(1)+cos(3)", 0));
+        Assertions.assertEquals(round( Math.cos(Math.cos(1) + Math.cos(3))), calc.getResult(" cos(cos(1)+cos(3))", 0));
     }
 
     @Test
     public void sin() {
-        Assertions.assertEquals(Math.sin(1), calc.getResult("sin(1)", 0));
-        Assertions.assertEquals(Math.sin(Math.sin(1)), calc.getResult("sin(sin(1))", 0));
-        Assertions.assertEquals(Math.sin(1) + Math.sin(3), calc.getResult("sin(1)+sin(3)", 0));
-        Assertions.assertEquals( Math.sin(Math.sin(1) + Math.sin(3)), calc.getResult(" sin(sin(1)+sin(3))", 0));
+        Assertions.assertEquals(round(Math.sin(1)), calc.getResult("sin(1)", 0));
+        Assertions.assertEquals(round(Math.sin(Math.sin(1))), calc.getResult("sin(sin(1))", 0));
+        Assertions.assertEquals(round(Math.sin(1) + Math.sin(3)), calc.getResult("sin(1)+sin(3)", 0));
+        Assertions.assertEquals(round(Math.sin(Math.sin(1) + Math.sin(3))), calc.getResult(" sin(sin(1)+sin(3))", 0));
     }
 
     @Test
     public void tan() {
-        Assertions.assertEquals(Math.tan(1), calc.getResult("tan(1)", 0));
-        Assertions.assertEquals(Math.tan(Math.tan(1)), calc.getResult("tan(tan(1))", 0));
-        Assertions.assertEquals(Math.tan(1) + Math.tan(3), calc.getResult("tan(1)+tan(3)", 0));
-        Assertions.assertEquals( Math.tan(Math.tan(1) + Math.tan(3)), calc.getResult(" tan(tan(1)+tan(3))", 0));
+        Assertions.assertEquals(round(Math.tan(1)), calc.getResult("tan(1)", 0));
+        Assertions.assertEquals(round(Math.tan(Math.tan(1))), calc.getResult("tan(tan(1))", 0));
+        Assertions.assertEquals(round(Math.tan(1) + Math.tan(3)), calc.getResult("tan(1)+tan(3)", 0));
+        Assertions.assertEquals(round(Math.tan(Math.tan(1) + Math.tan(3))), calc.getResult(" tan(tan(1)+tan(3))", 0));
     }
 
     @Test
     public void atan() {
-        Assertions.assertEquals(Math.atan(1), calc.getResult("atan(1)", 0));
-        Assertions.assertEquals(Math.atan(Math.atan(1)), calc.getResult("atan(atan(1))", 0));
-        Assertions.assertEquals(Math.atan(1) + Math.atan(3), calc.getResult("atan(1)+atan(3)", 0));
-        Assertions.assertEquals( Math.atan(Math.atan(1) + Math.atan(3)), calc.getResult(" atan(atan(1)+atan(3))", 0));
+        Assertions.assertEquals(round(Math.atan(1)), calc.getResult("atan(1)", 0));
+        Assertions.assertEquals(round(Math.atan(Math.atan(1))), calc.getResult("atan(atan(1))", 0));
+        Assertions.assertEquals(round(Math.atan(1) + Math.atan(3)), calc.getResult("atan(1)+atan(3)", 0));
+        Assertions.assertEquals(round(Math.atan(Math.atan(1) + Math.atan(3))), calc.getResult(" atan(atan(1)+atan(3))", 0));
     }
 
     @Test
     public void square() {
-        Assertions.assertEquals(Math.sqrt(1), calc.getResult("sqrt(1)", 0));
-        Assertions.assertEquals(Math.sqrt(Math.sqrt(1)), calc.getResult("sqrt(sqrt(1))", 0));
-        Assertions.assertEquals(Math.sqrt(1) + Math.sqrt(3), calc.getResult("sqrt(1)+sqrt(3)", 0));
-        Assertions.assertEquals( Math.sqrt(Math.sqrt(1) + Math.sqrt(3)), calc.getResult(" sqrt(sqrt(1)+sqrt(3))", 0));
+        Assertions.assertEquals(round(Math.sqrt(1)), calc.getResult("sqrt(1)", 0));
+        Assertions.assertEquals(round(Math.sqrt(Math.sqrt(1))), calc.getResult("sqrt(sqrt(1))", 0));
+        Assertions.assertEquals(round(Math.sqrt(1) + Math.sqrt(3)), calc.getResult("sqrt(1)+sqrt(3)", 0));
+        Assertions.assertEquals(round(Math.sqrt(Math.sqrt(1) + Math.sqrt(3))), calc.getResult(" sqrt(sqrt(1)+sqrt(3))", 0));
     }
 
     @Test
     public void replaceX() {
-        Assertions.assertEquals(13+3+26, calc.getResult("13+x+26", 3));
-        Assertions.assertEquals(Math.pow(3,3) + Math.sqrt(3), calc.getResult("x^x+sqrt(x)", 3));
-        Assertions.assertEquals(Math.pow(3,3), calc.getResult("x^x", 3));
+        Assertions.assertEquals(round(13+3+26), calc.getResult("13+x+26", 3));
+        Assertions.assertEquals(round(Math.pow(3,3) + Math.sqrt(3)), calc.getResult("x^x+sqrt(x)", 3));
+        Assertions.assertEquals(round(Math.pow(3,3)), calc.getResult("x^x", 3));
     }
 
     @Test
