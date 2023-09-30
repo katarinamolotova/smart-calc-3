@@ -7,13 +7,18 @@ import edu.school21.viewmodels.handlers.History;
 import edu.school21.viewmodels.handlers.Settings;
 import edu.school21.viewmodels.handlers.WindowManager;
 import edu.school21.viewmodels.helpers.Validator;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.math.BigDecimal;
 
 public class BasicViewModel {
     public Label minLabel;
@@ -29,6 +34,7 @@ public class BasicViewModel {
     public RadioMenuItem dailyRadioItem;
     public RadioMenuItem monthlyRadioItem;
     public ToggleGroup period;
+    public LineChart graph;
 
     private WindowManager windowManager;
     private History history;
@@ -94,7 +100,17 @@ public class BasicViewModel {
     }
 
     private void drawGraph(final String expression) {
+        final double xBegin = Double.parseDouble(minTextField.getText());
+        final double xEnd = Double.parseDouble(maxTextField.getText());
+        double step = (Math.abs(xBegin) + Math.abs(xEnd)) / 100.0;
+        double scale = Math.pow(10, 7);
 
+        graph.getData().clear();
+        graph.getData().add(new XYChart.Series<>(FXCollections.observableArrayList()));
+        for (double xResult = xBegin; xResult <= xEnd; xResult += step) {
+            double yResult = basicCalcModel.getResult(expression , Math.ceil(xResult * scale) / scale);
+            ((XYChart.Series) graph.getData().get(0)).getData().addAll(new XYChart.Data<>(xResult, yResult));
+        }
     }
 
     private void calculateResult(final String expression) {

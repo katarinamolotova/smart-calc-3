@@ -86,7 +86,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <LineChart alternativeColumnFillVisible="true" layoutX="361.0" layoutY="14.0" prefHeight="307.0" prefWidth="409.0">
+        <LineChart fx:id="graph" alternativeColumnFillVisible="true" layoutX="361.0" layoutY="14.0" prefHeight="307.0" prefWidth="409.0">
             <xAxis>
                 <NumberAxis side="BOTTOM" />
             </xAxis>
