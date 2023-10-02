@@ -1,49 +1,65 @@
 package edu.school21.model;
 
 import edu.school21.enums.CreditType;
-import edu.school21.enums.PeriodType;
+import edu.school21.enums.TermType;
 import lombok.Getter;
 
 import java.util.ArrayList;
 
 @Getter
 public class CreditCalcModel {
+    private static final Double MAX_PERCENT = 100.;
+    private static final Double SCALE = 100.;
+    private static final Integer MONTHS_OF_YEAR = 12;
+
     private ArrayList<Double> everyMothPay;
     private double totalPayment;
     private double overpay;
 
-    public void calculate(CreditType type, double sum, int amountOfMonth, PeriodType periodType, double percent) {
-        everyMothPay(type, sum, amountOfMonth, periodType, percent);
+    public void calculate(
+            final CreditType type,
+            final double sum,
+            final int amountOfMonth,
+            final TermType termType,
+            final double percent
+    ) {
+        everyMothPay(type, sum, amountOfMonth, termType, percent);
         totalPayment();
         overpay(sum);
     }
 
-   private void everyMothPay(CreditType type, double sum, int amountOfMonth, PeriodType periodType, double percent) {
+   private void everyMothPay(
+           final CreditType type,
+           final double sum,
+           final int amountOfMonth,
+           final TermType termType,
+           final double percent
+   ) {
        everyMothPay = new ArrayList<>();
-       double sumDynam = sum;
-       int data = (periodType == PeriodType.MONTH) ? amountOfMonth : amountOfMonth * 12;
-       double res;
+       double dynamicSum = sum;
+       final int period = (termType == TermType.MONTH) ? amountOfMonth : amountOfMonth * MONTHS_OF_YEAR;
+       final double newPercent = percent / MAX_PERCENT / MONTHS_OF_YEAR;
 
-       for (int i = 0; i < data; i++) {
+       for (int i = 0; i < period; i++) {
+           final double result;
            if (type == CreditType.ANNUITY) {
-               res = sum * ((percent / 100. / 12.) / (1. - Math.pow(1. + (percent / 100. / 12.), (-1. * data))));
+               result = sum * (newPercent / (1. - Math.pow(1. + newPercent, (-1. * period))));
            } else {
-               res = sum / data + sumDynam * (percent / 100. / 12.);
+               result = sum / period + dynamicSum * newPercent;
            }
-
-           everyMothPay.add(Math.ceil(res * 100.) / 100.);
-           sumDynam -= everyMothPay.get(i);
+           everyMothPay.add(Math.ceil(result * SCALE) / SCALE);
+           dynamicSum -= everyMothPay.get(i);
        }
     }
 
     private void totalPayment() {
-        for (Double payment : everyMothPay) {
+        for (final Double payment : everyMothPay) {
             totalPayment += payment;
         }
-        totalPayment = Math.ceil(totalPayment * 100) / 100;
+        totalPayment = Math.ceil(totalPayment * SCALE) / SCALE;
     }
 
-    private void overpay(double sum) {
-        overpay = Math.ceil((totalPayment - sum) * 100.) / 100.;
+    private void overpay(final double sum) {
+        overpay = Math.ceil((totalPayment - sum) * SCALE) / SCALE;
     }
 }

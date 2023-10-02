@@ -89,7 +89,7 @@ public class WindowManager {
         }
     }
 
-    public void showErrorMessage(final String message) {
+    public static void showErrorMessage(final String message) {
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(message);

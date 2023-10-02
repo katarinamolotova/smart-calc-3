@@ -1,7 +1,7 @@
 package edu.school21.viewmodels;
 
 import edu.school21.enums.CreditType;
-import edu.school21.enums.PeriodType;
+import edu.school21.enums.TermType;
 import edu.school21.model.CreditCalcModel;
 import edu.school21.viewmodels.handlers.Settings;
 import edu.school21.viewmodels.helpers.Validator;
@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CreditViewModel implements ChildViewModel {
 
@@ -36,9 +35,9 @@ public class CreditViewModel implements ChildViewModel {
         creditCalcModel = new CreditCalcModel();
 
         commonSumTextField.textProperty()
-                .addListener(Validator.createListenerForPositiveNumberWithLimit(commonSumTextField, Validator.MAX_AMOUNT_MONEY));
+                .addListener(Validator.createListenerForNumberBetween(commonSumTextField, 0,  Validator.MAX_AMOUNT_MONEY));
         percentTextField.textProperty()
-                .addListener(Validator.createListenerForPositiveNumberWithLimit(percentTextField, Validator.MAX_PERCENT));
+                .addListener(Validator.createListenerForNumberBetween(percentTextField, 0, Validator.MAX_PERCENT));
         periodTextField.textProperty()
                 .addListener(Validator.createListenerForPositiveNumberWithLimit(periodTextField, Validator.MAX_AMOUNT_MONTHS));
         updateStyle();
@@ -56,7 +55,7 @@ public class CreditViewModel implements ChildViewModel {
         overPay.setText(String.valueOf(creditCalcModel.getOverpay()));
         totalPayment.setText(String.valueOf(creditCalcModel.getTotalPayment()));
 
-        ArrayList<Double> monthlyPayment = creditCalcModel.getEveryMothPay();
+        final ArrayList<Double> monthlyPayment = creditCalcModel.getEveryMothPay();
 
         for (int i = 0; i < monthlyPayment.size(); i++) {
             final String text = monthlyPay.getText();
@@ -65,12 +64,12 @@ public class CreditViewModel implements ChildViewModel {
     }
 
     private CreditType getCreditType() {
-        RadioButton creditType = (RadioButton) creditCalcType.getSelectedToggle();
+        final RadioButton creditType = (RadioButton) creditCalcType.getSelectedToggle();
         return CreditType.getCreditType(creditType.getText());
     }
 
-    private PeriodType getPeriodType() {
-        String item = period.getSelectionModel().getSelectedItem();
-        return item == null ? PeriodType.MONTH : PeriodType.getPeriodType(item);
+    private TermType getPeriodType() {
+        final String item = period.getSelectionModel().getSelectedItem();
+        return item == null ? TermType.MONTH : TermType.getTermType(item);
     }
 }

@@ -24,7 +24,7 @@ public class History {
     private final ObservableList<String> history = FXCollections.observableArrayList();
     private final MultipleSelectionModel<String> historySelectionModel;
 
-    private static final Logger rootLog = LogManager.getRootLogger();
+    private static final Logger ROOT_LOG = LogManager.getRootLogger();
     private static Logger log;
 
     public History(final ListView<String> listHistory) {
@@ -90,8 +90,8 @@ public class History {
             }
             log = LogManager.getLogger(historyWrapper.getPeriodRotation());
         } catch (final Exception e) {
-            rootLog.debug(e.getMessage());
-            showAlertErrorWindow("Could not load data from resource " + HISTORY_FILE_NAME);
+            ROOT_LOG.debug(e.getMessage());
+            WindowManager.showErrorMessage("Could not load data from resource " + HISTORY_FILE_NAME);
         }
     }
 
@@ -111,15 +111,8 @@ public class History {
             final OutputStream out = new FileOutputStream(HISTORY_FILE_NAME);
             marshaller.marshal(historyWrapper, out);
         } catch (final Exception e) {
-            rootLog.debug(e.getMessage());
-            showAlertErrorWindow("Could not save data to resource " + HISTORY_FILE_NAME);
+            ROOT_LOG.debug(e.getMessage());
+            WindowManager.showErrorMessage("Could not save data to resource " + HISTORY_FILE_NAME);
         }
-    }
-
-    private void showAlertErrorWindow(final String message) {
-        final Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

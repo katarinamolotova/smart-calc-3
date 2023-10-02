@@ -24,7 +24,7 @@ public class Settings {
             final BufferedReader reader = new BufferedReader(fileReader);
             styleTemplate = reader.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (final IOException e) {
-            showAlertErrorWindow(e.getMessage());
+            WindowManager.showErrorMessage(e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class Settings {
             fileWriter.write(style);
             fileWriter.close();
         } catch (final IOException e) {
-            showAlertErrorWindow(e.getMessage());
+            WindowManager.showErrorMessage(e.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class Settings {
             final OutputStream out = new FileOutputStream(STYLE_SETTINGS_FILE_NAME);
             properties.store(out, "Application settings");
         } catch (final IOException e) {
-            showAlertErrorWindow(e.getMessage());
+            WindowManager.showErrorMessage(e.getMessage());
         }
     }
 
@@ -91,12 +91,5 @@ public class Settings {
                 getButtonTextColor(),
                 getButtonFontSize()
         );
-    }
-
-    private void showAlertErrorWindow(final String message) {
-        final Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

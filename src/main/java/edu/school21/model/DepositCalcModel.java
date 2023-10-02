@@ -1,117 +1,126 @@
 package edu.school21.model;
 
+import edu.school21.enums.PeriodType;
+import edu.school21.enums.TermType;
 import javafx.util.Pair;
-import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static edu.school21.model.helpers.Validator.checkForDeposit;
-
-@AllArgsConstructor
 public class DepositCalcModel {
-    private double result = 0;
-    private double intermediateSum = 0;
-    private double tempPercent = 0;
-    private int sub_index = 0;
-    private int addIndex = 0;
-    private double add = 0;
-    private double sum = 0;
-    private double sub = 0;
-    private int countPay = 0;
-    private int countCap = 0;
+    private static final Integer MONTHS_OF_YEAR = 12;
+    private static final Integer DAYS_OF_YEAR = 365;
+    private static final Double MAX_PERCENT = 100.;
+    private static final Double SCALE = 100.;
 
+    private double result;
+    private double intermediateSum;
+    private double tempPercent;
+    private double add;
+    private double sum;
+    private double sub;
+    private int countPay;
+    private int countCap;
 
-    private boolean checkListAddAndSub(ArrayList<Pair<String, Pair<Integer, Double>>> list) {
-        boolean result = true;
-        try {
-            checkForDeposit(list);
-        } catch (RuntimeException e) {
-            result = false;
-        }
-        return result;
-    }
-
-    private double resultPercent(
-            double sum,
-            Pair<String, Integer> amount_of_month,
-            double percent,
-            int capitalisation,
-            int periodPay,
-            int monthStart,
-            ArrayList<Pair<String, Pair<Integer, Double>>> additions,
-            ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal
+    public double resultPercent(
+            final double summa,
+            final int amountOfMonth,
+            final TermType termType,
+            final double percent,
+            final PeriodType capitalizationPeriod,
+            final PeriodType periodPay,
+            final int monthStart,
+            final Map<LocalDate, Double> additions,
+            final Map<LocalDate, Double> withdrawal
     ) {
+        sum = summa;
+        intermediateSum = summa;
+        final int period = (termType == TermType.MONTH) ? amountOfMonth : amountOfMonth * MONTHS_OF_YEAR;
 
-        result = 0;
-        intermediateSum = sum;
-        tempPercent = 0;
-        sub_index = 0;
-        addIndex = 0;
-        add = 0;
+        for (int i = monthStart; i < monthStart + period; i++, countCap++, countPay++) {
+            // счет с нуля
+            final int numberOfMonth = (i + MONTHS_OF_YEAR - 1) % MONTHS_OF_YEAR;
+            final int daysInMonth = (numberOfMonth == 1) ? 28 : (31 - numberOfMonth % 7 % 2);
 
-        int data = (amount_of_month.getValue() != 0) ? Integer.parseInt(amount_of_month.getKey()) * 12 : Integer.parseInt(amount_of_month.getKey());
-        for (int i = monthStart; i < monthStart + data; i++, countCap++, countPay++) {
-            int index = (i + 11) % 12;
-            int days_in_month = (index == 1) ? 28 : (31 - index % 7 % 2);
-            check_add_list(index, additions);
-            checkSubList(index, withdrawal);
-            checkCapitalisation(capitalisation);
+            checkAddList(numberOfMonth, additions);
+            checkSubList(numberOfMonth, withdrawal);
+            checkCapitalisation(capitalizationPeriod);
             checkPeriodPay(periodPay);
 
-            double expression = (intermediateSum + add - sub) / 100d * percent * days_in_month / 365;
+            final double expression = (intermediateSum + add - sub) / MAX_PERCENT * percent * daysInMonth / DAYS_OF_YEAR;
             result += expression;
             tempPercent += expression;
         }
-        return result;
+        return Math.ceil(result * SCALE) / SCALE;
     }
 
-
-    private void check_add_list(int index, ArrayList<Pair<String, Pair<Integer, Double>>> additions) {
-        if (addIndex < additions.size() &&
-            index == additions.get(addIndex).getValue().getKey()) {
-            add += additions.get(addIndex).getValue().getValue();
-            addIndex++;
-        }
+    public double sumAtTheEnd(
+            final double sumBegin,
+            final double resultPercent,
+            final Map<LocalDate, Double> additions,
+            final Map<LocalDate, Double> withdrawal
+    ) {
+        double result = sumBegin + resultPercent;
+        result += additions.values().stream().mapToDouble(i -> i).sum();
+        result += withdrawal.values().stream().mapToDouble(i -> -1 * i).sum();
+        return Math.ceil(result * SCALE) / SCALE;
     }
 
-    private void checkSubList(int index, ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal) {
-        if (sub_index < withdrawal.size() && index == withdrawal.get(sub_index).getValue().getKey()) {
-            sub += withdrawal.get(sub_index).getValue().getValue();
-            sub_index++;
-        }
+    public double sumTax(final double taxPercent, final double resultPercent) {
+        final double result = resultPercent * (taxPercent / MAX_PERCENT);
+        return Math.ceil(result * SCALE) / SCALE;
     }
 
-    private void checkCapitalisation(int capitalisation) {
-        if (countCap == capitalisation && capitalisation != 0) {
+    private void checkAddList(
+            final int numberOfMonth,
+            final Map<LocalDate, Double> additions
+    ) {
+        final Pair<Integer, Double> countAndSum = checkList(numberOfMonth, additions);
+        add += countAndSum.getValue();
+    }
+
+    private void checkSubList(
+            final int numberOfMonth,
+            final Map<LocalDate, Double> withdrawal
+    ) {
+        final Pair<Integer, Double> countAndSum = checkList(numberOfMonth, withdrawal);
+        sub += countAndSum.getValue();
+    }
+
+    private Pair<Integer, Double> checkList(
+            final int numberOfMonth,
+            final Map<LocalDate, Double> list
+    ) {
+        final AtomicReference<Double> add = new AtomicReference<>(0d);
+        final AtomicReference<Integer> index = new AtomicReference<>(0);
+        final List<LocalDate> deleteList = new ArrayList<>();
+        list.forEach((key, value) -> {
+            final int number = key.getMonthValue() - 1;
+            if (numberOfMonth == number) {
+                add.updateAndGet(v -> v + list.get(key));
+                index.getAndSet(index.get() + 1);
+                deleteList.add(key);
+            }
+        });
+        deleteList.forEach(list::remove);
+        return new Pair(index.get(), add.get());
+    }
+
+    private void checkCapitalisation(final PeriodType capitalisationPeriod) {
+        if (capitalisationPeriod.getCountOfMonths() != 0 && countCap == capitalisationPeriod.getCountOfMonths()) {
             intermediateSum += tempPercent;
             countCap = 0;
             tempPercent = 0;
         }
     }
 
-    private void checkPeriodPay(int periodPay) {
-        if (countPay == periodPay && periodPay != 0) {
+    private void checkPeriodPay(final PeriodType periodPay) {
+        if (periodPay.getCountOfMonths() != 0 && countPay == periodPay.getCountOfMonths()) {
             intermediateSum = sum;
             countPay = 0;
         }
-    }
-
-    private double sumAtTheEnd(double sumBegin,
-                       double resultPercent,
-                       ArrayList<Pair<String, Pair<Integer, Double>>> additions,
-                       ArrayList<Pair<String, Pair<Integer, Double>>> withdrawal) {
-
-        double result = sumBegin + resultPercent;
-        for (Pair<String, Pair<Integer, Double>> i : additions) {
-            result += i.getValue().getValue();
-        }
-        for (Pair<String, Pair<Integer, Double>> i : withdrawal) {
-            result -= i.getValue().getValue();
-        }
-        return result;
-    }
-
-    private double sumTax(double taxPercent, double resultPercent) {
-        return resultPercent * (taxPercent / 100);
     }
 }

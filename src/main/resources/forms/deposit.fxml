@@ -25,33 +25,33 @@
       <Label layoutX="9.0" layoutY="134.0" text="Список пополнений:" />
       <TextField fx:id="addAmountTextField" layoutX="8.0" layoutY="154.0" prefHeight="26.0" prefWidth="109.0" text="10000" />
       <Label layoutX="124.0" layoutY="157.0" text="руб." />
-      <DatePicker fx:id="addDatePicker" editable="false" layoutX="166.0" layoutY="153.0" prefHeight="26.0" prefWidth="146.0" promptText="2023-09-13" />
-      <Button layoutX="325.0" layoutY="138.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Добавить" />
-      <Button layoutX="325.0" layoutY="167.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Удалить" />
-      <TextArea editable="false" layoutX="444.0" layoutY="138.0" prefHeight="55.0" prefWidth="165.0" />
+      <DatePicker fx:id="addDatePicker" editable="false" layoutX="159.0" layoutY="153.0" prefHeight="26.0" prefWidth="146.0" promptText="2023-09-13" />
+      <Button layoutX="317.0" layoutY="138.0" mnemonicParsing="false" onAction="#addToAdditionsList" prefHeight="26.0" prefWidth="106.0" text="Добавить" />
+      <Button layoutX="317.0" layoutY="167.0" mnemonicParsing="false" onAction="#deleteFromAdditionsList" prefHeight="26.0" prefWidth="106.0" text="Удалить" />
+      <TextArea fx:id="additionsTextArea" editable="false" layoutX="430.0" layoutY="138.0" prefHeight="55.0" prefWidth="179.0" />
 
        <Label layoutX="9.0" layoutY="199.0" text="Список снятий:" />
        <TextField fx:id="subAmountTextField" layoutX="8.0" layoutY="219.0" prefHeight="26.0" prefWidth="109.0" text="10000" />
        <Label layoutX="124.0" layoutY="222.0" text="руб." />
-       <DatePicker fx:id="subDatePicker" editable="false" layoutX="166.0" layoutY="218.0" prefHeight="26.0" prefWidth="146.0" promptText="2023-09-13" />
-       <Button layoutX="325.0" layoutY="203.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Добавить" />
-       <Button layoutX="325.0" layoutY="232.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Удалить" />
-       <TextArea editable="false" layoutX="444.0" layoutY="203.0" prefHeight="55.0" prefWidth="165.0" />
+       <DatePicker fx:id="subDatePicker" editable="false" layoutX="160.0" layoutY="218.0" prefHeight="26.0" prefWidth="146.0" promptText="2023-09-13" />
+       <Button layoutX="316.0" layoutY="203.0" mnemonicParsing="false" onAction="#addToWithdrawalsList" prefHeight="26.0" prefWidth="106.0" text="Добавить" />
+       <Button layoutX="316.0" layoutY="232.0" mnemonicParsing="false" onAction="#deleteFromWithdrawalsList" prefHeight="26.0" prefWidth="106.0" text="Удалить" />
+       <TextArea fx:id="withdrawalsTextArea" editable="false" layoutX="430.0" layoutY="203.0" prefHeight="55.0" prefWidth="179.0" />
       <Button layoutX="236.0" layoutY="270.0" mnemonicParsing="false" onAction="#clickCalculateButton" prefHeight="26.0" prefWidth="139.0" text="Рассчитать" />
 
        <Separator layoutX="-6.0" layoutY="306.0" prefHeight="5.0" prefWidth="623.0" />
 
        <Label layoutX="11.0" layoutY="331.0" text="Начисленные проценты:" />
-       <TextField editable="false" layoutX="461.0" layoutY="326.0" prefHeight="26.0" prefWidth="109.0" text="0" />
+       <TextField fx:id="resultPercentTextField" editable="false" layoutX="461.0" layoutY="326.0" prefHeight="26.0" prefWidth="109.0" text="0" />
        <Label layoutX="581.0" layoutY="329.0" text="руб." />
        <Label layoutX="10.0" layoutY="401.0" text="Сумма на вкладе к концу срока:" />
-       <TextField editable="false" layoutX="461.0" layoutY="396.0" prefHeight="26.0" prefWidth="109.0" text="0" />
+       <TextField fx:id="summaTextField" editable="false" layoutX="461.0" layoutY="396.0" prefHeight="26.0" prefWidth="109.0" text="0" />
        <Label layoutX="581.0" layoutY="399.0" text="руб." />
        <Label layoutX="10.0" layoutY="366.0" prefHeight="17.0" prefWidth="92.0" text="Сумма налога:" />
-       <TextField editable="false" layoutX="461.0" layoutY="361.0" prefHeight="26.0" prefWidth="109.0" text="0" />
+       <TextField fx:id="taxSummaTextField" editable="false" layoutX="461.0" layoutY="361.0" prefHeight="26.0" prefWidth="109.0" text="0" />
        <Label layoutX="581.0" layoutY="364.0" text="руб." />
 
-       <ComboBox layoutX="7.0" layoutY="91.0" prefHeight="25.0" prefWidth="142.0" promptText="Единовременно">
+       <ComboBox fx:id="periodPayment" layoutX="7.0" layoutY="91.0" prefHeight="25.0" prefWidth="142.0" promptText="Единовременно">
            <items>
                <FXCollections fx:factory="observableArrayList">
                    <String fx:value="Единовременно" />
@@ -61,7 +61,7 @@
                </FXCollections>
            </items>
        </ComboBox>
-       <ComboBox layoutX="164.0" layoutY="91.0" prefHeight="25.0" prefWidth="146.0" promptText="Нет">
+       <ComboBox fx:id="capitalizationPeriod" layoutX="164.0" layoutY="91.0" prefHeight="25.0" prefWidth="146.0" promptText="Нет">
            <items>
                <FXCollections fx:factory="observableArrayList">
                    <String fx:value="Нет" />

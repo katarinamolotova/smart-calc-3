@@ -95,7 +95,7 @@ public class BasicViewModel {
         } catch (final Exception e) {
             final String message = e.getMessage();
             history.logError(message);
-            windowManager.showErrorMessage(message);
+            WindowManager.showErrorMessage(message);
         }
     }
 
@@ -115,20 +115,17 @@ public class BasicViewModel {
     }
 
     private void calculateResult(final String expression) {
-        double result = basicCalcModel.getResult(expression , Double.parseDouble(maxTextField.getText()));
+        final double result = basicCalcModel.getResult(expression , Double.parseDouble(maxTextField.getText()));
         history.logInfo(String.format("Result is %f", result));
         calcTextArea.setText(String.valueOf(result));
     }
 
     @FXML
     public void checkGraphBox() {
-        changeVisibleForGraphElements(graphCheckBox.isSelected());
-    }
-
-    private void changeVisibleForGraphElements(final boolean visible) {
-        maxLabel.setVisible(visible);
-        minLabel.setVisible(visible);
-        minTextField.setVisible(visible);
+        final boolean isVisible = graphCheckBox.isSelected();
+        maxLabel.setVisible(isVisible);
+        minLabel.setVisible(isVisible);
+        minTextField.setVisible(isVisible);
     }
 
     @FXML
