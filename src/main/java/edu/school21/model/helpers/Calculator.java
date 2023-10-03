@@ -39,6 +39,7 @@ public class Calculator {
             checkDivision(value1);
             result = value2 / value1;
         } else if (Objects.equals(operation, "mod")) {
+            checkDivision(value1);
             result = value2 % value1;
         } else if (Objects.equals(operation, "^")) {
             result = Math.pow(value2, value1);
