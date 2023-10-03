@@ -32,8 +32,6 @@ public class CreditViewModel implements ChildViewModel {
 
     @Override
     public void initialize() {
-        creditCalcModel = new CreditCalcModel();
-
         commonSumTextField.textProperty()
                 .addListener(Validator.createListenerForNumberBetween(commonSumTextField, 0,  Validator.MAX_AMOUNT_MONEY));
         percentTextField.textProperty()
@@ -44,6 +42,7 @@ public class CreditViewModel implements ChildViewModel {
     }
 
     public void clickCalculateButton() {
+        creditCalcModel = new CreditCalcModel();
         creditCalcModel.calculate(
                 getCreditType(),
                 Double.parseDouble(commonSumTextField.getText()),
