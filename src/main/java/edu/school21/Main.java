@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Locale;
 
 public class Main extends Application {
 
@@ -19,6 +20,11 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         Application.launch(args);
+    }
+
+    @Override
+    public void init() {
+        Locale.setDefault(Locale.US);
     }
 
     @Override
