@@ -26,8 +26,8 @@ public class CreditViewModel implements ChildViewModel {
 
     @Override
     public void updateStyle() {
-        anchorPane.getStylesheets().removeAll();
-        anchorPane.getStylesheets().add(Settings.STYLESHEET_FILE_NAME);
+        anchorPane.getStylesheets().clear();
+        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
     }
 
     @Override

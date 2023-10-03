@@ -1,14 +1,12 @@
 package edu.school21.viewmodels.handlers;
 
-import edu.school21.Main;
-import javafx.scene.control.Alert;
-
 import java.io.*;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class Settings {
     public static final String STYLESHEET_FILE_NAME = "settings/settings.css";
+    public static final File STYLESHEET_FILE = new File(STYLESHEET_FILE_NAME);
     private static final String STYLE_TEMPLATE_FILE_NAME = "settings/settings_template.txt";
     private static final String STYLE_SETTINGS_FILE_NAME = "settings/settings.properties";
 

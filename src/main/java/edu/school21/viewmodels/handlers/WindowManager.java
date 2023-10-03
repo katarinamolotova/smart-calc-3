@@ -1,5 +1,6 @@
 package edu.school21.viewmodels.handlers;
 
+import edu.school21.Main;
 import edu.school21.enums.ScreenType;
 import edu.school21.viewmodels.*;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.logging.log4j.LogManager;
@@ -138,11 +140,8 @@ public class WindowManager {
     public void updateStyle() {
         settings.setStyleSheetFromSettings();
 
-        final ObservableList<String> currentStyle = anchorPane.getStylesheets();
-        anchorPane.getStylesheets().removeAll(currentStyle);
-        anchorPane.getStylesheets().add(Settings.STYLESHEET_FILE_NAME);
-
-//        anchorPane.setStyle("-fx-background-color: #ffff00;");
+        anchorPane.getStylesheets().clear();
+        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
 
         updateChildStyleIfNotNull(settingsViewModel);
         updateChildStyleIfNotNull(creditViewModel);
