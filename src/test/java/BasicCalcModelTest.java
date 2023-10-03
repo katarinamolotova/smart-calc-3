@@ -106,6 +106,10 @@ public class BasicCalcModelTest {
 
     @Test
     public void replaceX() {
+        Assertions.assertEquals(round(3+3+13), calc.getResult("x+3+13", 3));
+        Assertions.assertEquals(round((3+3)*3+13), calc.getResult("(3+3)*x+13", 3));
+        Assertions.assertEquals(round(3*3), calc.getResult("x*x", 3));
+        Assertions.assertEquals(round(13*3+13), calc.getResult("13x+13", 3));
         Assertions.assertEquals(round(13+3+26), calc.getResult("13+x+26", 3));
         Assertions.assertEquals(round(Math.pow(3,3) + Math.sqrt(3)), calc.getResult("x^x+sqrt(x)", 3));
         Assertions.assertEquals(round(Math.pow(3,3)), calc.getResult("x^x", 3));

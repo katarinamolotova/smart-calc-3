@@ -10,17 +10,20 @@ public class DataCooker {
     public static String DataCook(String rawData, double xValue) {
         String temp = replaceValueX(rawData, xValue);
         temp = exponentialEntryReplacement(temp);
+        temp = insertMultiple(temp);
         return temp;
-//        return insertMultiple(temp.replace('.', ','));
     }
 
     private static String insertMultiple(final String inputString) {
-//        for(int i = 0; i < inputString.length(); i++) {
-//            if (Character.isDigit(inputString.charAt(i)) && inputString.charAt(i+1)  ) {
-//
-//            }
-//        }
-        return inputString;
+        String result = inputString;
+        for(int i = 1; i < result.length(); i++) {
+            if(result.charAt(i) == '(' && (Character.isDigit(result.charAt(i-1)) )) {
+                String subBegin = result.substring(0, i);
+                String subEnd = result.substring(i);
+                result = subBegin + '*' + subEnd;
+            }
+        }
+        return result;
     }
 
     private static String exponentialEntryReplacement(final String inputString) {
