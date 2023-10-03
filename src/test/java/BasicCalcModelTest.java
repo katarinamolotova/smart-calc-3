@@ -113,6 +113,7 @@ public class BasicCalcModelTest {
         Assertions.assertEquals(round(13+3+26), calc.getResult("13+x+26", 3));
         Assertions.assertEquals(round(Math.pow(3,3) + Math.sqrt(3)), calc.getResult("x^x+sqrt(x)", 3));
         Assertions.assertEquals(round(Math.pow(3,3)), calc.getResult("x^x", 3));
+        Assertions.assertEquals(10*10*10, calc.getResult("xxx", 10));
     }
 
     @Test
@@ -154,8 +155,9 @@ public class BasicCalcModelTest {
     }
 
     @Test
-    public void strange() {
+    public void notANumber() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("-asin(4)", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("10mod0", 0) );
     }
 
     @Test
