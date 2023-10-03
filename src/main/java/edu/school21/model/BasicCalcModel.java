@@ -29,8 +29,8 @@ public class BasicCalcModel {
             BigDecimal bd = new BigDecimal(Double.toString(value));
             bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
             return bd.doubleValue();
-        } catch (final IllegalStateException e) {
-            throw new IllegalStateException("Something wrong");
+        } catch (final Exception e) {
+            throw new IllegalArgumentException("Something wrong");
         }
     }
 }
