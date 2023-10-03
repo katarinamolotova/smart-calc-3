@@ -1,8 +1,10 @@
 import edu.school21.model.BasicCalcModel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Locale;
 
 public class BasicCalcModelTest {
     BasicCalcModel calc = new BasicCalcModel();
@@ -13,6 +15,11 @@ public class BasicCalcModelTest {
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    @BeforeEach
+    public void setLocal() {
+        Locale.setDefault(Locale.US);
     }
 
     @Test
@@ -34,7 +41,7 @@ public class BasicCalcModelTest {
     @Test
     public void degree() {
         Assertions.assertEquals(Math.pow(3, 3), calc.getResult("3^3", 0));
-        Assertions.assertEquals(Math.pow(Math.pow(2, 3), 3), calc.getResult("2^3^3", 0));
+        Assertions.assertEquals(Math.pow(2, Math.pow(3, 3)), calc.getResult("2^3^3", 0));
         Assertions.assertEquals( 3 + Math.pow(3, 3), calc.getResult("3+3^3", 0));
     }
 
@@ -116,6 +123,14 @@ public class BasicCalcModelTest {
     @Test
     public void log() {
         Assertions.assertEquals(round(Math.log10(45)), calc.getResult("log(45)", 3));
+    }
+
+    @Test
+    public void exceptionTest() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("sqrt(-1)", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("123/0", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("log(-1)", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("lon(-1)", 0) );
     }
 
     @Test

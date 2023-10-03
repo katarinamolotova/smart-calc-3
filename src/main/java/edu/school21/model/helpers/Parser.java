@@ -58,8 +58,8 @@ public class Parser {
         } else if (isBinaryOperation(op) || isUnaryOperation(op) || Objects.equals(op, "(")) {
             boolean flagPrevPow = true;
 
-            if (Objects.equals(op, "^") && !operations.empty()) {
-                flagPrevPow = !(Objects.equals(operations.pop(), "^"));
+            if (Objects.equals(op, "^") && !operations.isEmpty()) {
+                flagPrevPow = !(Objects.equals(operations.peek(), "^"));
             }
 
             if (!Objects.equals(op, "(") && flagPrevPow) {
