@@ -76,6 +76,14 @@ public class BasicCalcModelTest {
   }
 
   @Test
+  public void exponential() {
+    Assertions.assertEquals(134217728 + 10, calc.getResult("1.34217728E8+10", 0));
+    Assertions.assertEquals(134217728 / 10d, calc.getResult("1.34217728E8/10", 0));
+    Assertions.assertEquals(134217728 * 10, calc.getResult("1.34217728E8*10", 0));
+    Assertions.assertEquals(134217728 - 10, calc.getResult("1.34217728E8-10", 0));
+  }
+
+  @Test
   public void cos() {
     Assertions.assertEquals(round(Math.cos(1)), calc.getResult("cos(1)", 0));
     Assertions.assertEquals(round(Math.cos(Math.cos(1))), calc.getResult("cos(cos(1))", 0));
@@ -158,6 +166,19 @@ public class BasicCalcModelTest {
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("log(-1)", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("ln(-1)", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () ->  calc.getResult("3mod0", 3));
+    Assertions.assertThrows(IllegalArgumentException.class,
+        () ->  calc.getResult("sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)" +
+                                        "sqrt(45)+ln(45)+log(45)", 3));
   }
 
   @Test
