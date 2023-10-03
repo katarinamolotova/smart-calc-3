@@ -25,8 +25,12 @@ public class BasicCalcModel {
 
     private static double round(double value) {
         if (AROUNDVAR < 0) throw new IllegalArgumentException();
-        BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        try {
+            BigDecimal bd = new BigDecimal(Double.toString(value));
+            bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        } catch (final Exception e) {
+            throw new IllegalArgumentException("Something wrong");
+        }
     }
 }

@@ -51,6 +51,7 @@ public class BasicCalcModelTest {
   @Test
   public void division() {
     Assertions.assertEquals(round(5 / 0.00000000005), calc.getResult("5/0.00000000005", 0));
+    Assertions.assertEquals(round(5 / 0.0000005), calc.getResult("5/0.0000005", 0));
   }
 
   @Test
@@ -177,10 +178,10 @@ public class BasicCalcModelTest {
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("...", 0));
   }
 
-  @Test
+    @Test
   public void notANumber() {
-    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("-asin(4)", 0));
-    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("10mod0", 0));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("-asin(4)", 0) );
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("10mod0", 0) );
   }
 
   @Test
