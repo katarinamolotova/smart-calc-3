@@ -51,6 +51,8 @@ public class BasicCalcModelTest {
   @Test
   public void division() {
     Assertions.assertEquals(round(5 / 0.00000000005), calc.getResult("5/0.00000000005", 0));
+    Assertions.assertEquals(round(0.0000000005 / 0.00000000005), calc.getResult("0.0000000005 / 0.00000000005", 0));
+    Assertions.assertEquals(round(13 / -13d), calc.getResult("13 / -13", 0));
     Assertions.assertEquals(round(5 / 0.0000005), calc.getResult("5/0.0000005", 0));
   }
 
