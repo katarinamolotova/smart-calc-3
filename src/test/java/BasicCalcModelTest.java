@@ -9,7 +9,7 @@ import java.util.Locale;
 public class BasicCalcModelTest {
 
   BasicCalcModel calc = new BasicCalcModel();
-  static final int AROUNDVAR = 10;
+  static final int AROUNDVAR = 7;
 
   private static double round(double value) {
     if (AROUNDVAR < 0) {
@@ -133,6 +133,9 @@ public class BasicCalcModelTest {
 
   @Test
   public void mod() {
+    Assertions.assertEquals(round(3%2), calc.getResult("3mod2", 3));
+    Assertions.assertEquals(round(3%2.3), calc.getResult("3mod2.3", 3));
+    Assertions.assertEquals(round(-3%2.3), calc.getResult("-3mod2.3", 3));
   }
 
   @Test
@@ -151,6 +154,7 @@ public class BasicCalcModelTest {
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("123/0", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("log(-1)", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("ln(-1)", 0));
+    Assertions.assertThrows(IllegalArgumentException.class, () ->  calc.getResult("3mod0", 3));
   }
 
   @Test
@@ -158,7 +162,11 @@ public class BasicCalcModelTest {
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult(")(", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("()", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("(.)", 0));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("(.)(.)", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("(", 0));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult(")", 0));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("(()))", 0));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("((())", 0));
   }
 
   @Test
@@ -179,8 +187,10 @@ public class BasicCalcModelTest {
   public void megaTests() {
     Assertions.assertEquals(344378539330472184817647616.000000,
         calc.getResult("14^23/6*9+5-1+(56*2)", 0));
-    Assertions.assertEquals(1.3762255134, calc.getResult("cos(45)+sin(45)", 3));
-    Assertions.assertEquals(12.168078936, calc.getResult("sqrt(45)+ln(45)+log(45)", 10));
+    Assertions.assertEquals(round(Math.cos(45)+Math.sin(45)),
+        calc.getResult("cos(45)+sin(45)", 3));
+    Assertions.assertEquals(round(Math.sqrt(45)+Math.log10(45)+Math.log(45)),
+        calc.getResult("sqrt(45)+ln(45)+log(45)", 10));
   }
 }
 

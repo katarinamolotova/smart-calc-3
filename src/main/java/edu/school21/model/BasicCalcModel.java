@@ -14,7 +14,7 @@ import java.util.Queue;
 
 @Getter
 public class BasicCalcModel {
-    static final int AROUNDVAR = 10;
+    static final int AROUNDVAR = 7;
 
     public double getResult(final String inputString, final double value) {
         Validator.validateData(inputString);
