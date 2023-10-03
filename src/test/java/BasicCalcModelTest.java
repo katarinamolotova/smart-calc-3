@@ -50,6 +50,10 @@ public class BasicCalcModelTest {
 
   @Test
   public void division() {
+    Assertions.assertEquals(round(5 / 0.00000000005), calc.getResult("5/0.00000000005", 0));
+    Assertions.assertEquals(round(0.0000000005 / 0.00000000005),
+        calc.getResult("0.0000000005 / 0.00000000005", 0));
+    Assertions.assertEquals(round(13 / -13d), calc.getResult("13 / -13", 0));
     Assertions.assertEquals(round(5 / 0.0000005), calc.getResult("5/0.0000005", 0));
   }
 
@@ -70,6 +74,14 @@ public class BasicCalcModelTest {
     Assertions.assertEquals(
         round(100 - (9999.1 - (3213 - (123.12312)))),
         calc.getResult("100-(9999.1-(3213-(123.12312)))", 0));
+  }
+
+  @Test
+  public void exponential() {
+    Assertions.assertEquals(134217728 + 10, calc.getResult("1.34217728E8+10", 0));
+    Assertions.assertEquals(134217728 / 10d, calc.getResult("1.34217728E8/10", 0));
+    Assertions.assertEquals(134217728 * 10, calc.getResult("1.34217728E8*10", 0));
+    Assertions.assertEquals(134217728 - 10, calc.getResult("1.34217728E8-10", 0));
   }
 
   @Test
@@ -133,9 +145,9 @@ public class BasicCalcModelTest {
 
   @Test
   public void mod() {
-    Assertions.assertEquals(round(3%2), calc.getResult("3mod2", 3));
-    Assertions.assertEquals(round(3%2.3), calc.getResult("3mod2.3", 3));
-    Assertions.assertEquals(round(-3%2.3), calc.getResult("-3mod2.3", 3));
+    Assertions.assertEquals(round(3 % 2), calc.getResult("3mod2", 3));
+    Assertions.assertEquals(round(3 % 2.3), calc.getResult("3mod2.3", 3));
+    Assertions.assertEquals(round(-3 % 2.3), calc.getResult("-3mod2.3", 3));
   }
 
   @Test
@@ -154,7 +166,20 @@ public class BasicCalcModelTest {
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("123/0", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("log(-1)", 0));
     Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("ln(-1)", 0));
-    Assertions.assertThrows(IllegalArgumentException.class, () ->  calc.getResult("3mod0", 3));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("3mod0", 3));
+    Assertions.assertThrows(IllegalArgumentException.class,
+        () -> calc.getResult("sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)" +
+            "sqrt(45)+ln(45)+log(45)", 3));
   }
 
   @Test
@@ -189,7 +214,7 @@ public class BasicCalcModelTest {
         calc.getResult("14^23/6*9+5-1+(56*2)", 0));
     Assertions.assertEquals(round(Math.cos(45)+Math.sin(45)),
         calc.getResult("cos(45)+sin(45)", 3));
-    Assertions.assertEquals(round(Math.sqrt(45)+Math.log10(45)+Math.log(45)),
+    Assertions.assertEquals(round(Math.sqrt(45) + Math.log10(45) + Math.log(45)),
         calc.getResult("sqrt(45)+ln(45)+log(45)", 10));
   }
 }
