@@ -14,7 +14,7 @@ import java.util.Queue;
 
 @Getter
 public class BasicCalcModel {
-    static final int AROUNDVAR = 10;
+    static final int AROUNDVAR = 7;
 
     public double getResult(final String inputString, final double value) {
         Validator.validateData(inputString);
@@ -25,8 +25,12 @@ public class BasicCalcModel {
 
     private static double round(double value) {
         if (AROUNDVAR < 0) throw new IllegalArgumentException();
-        BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        try {
+            BigDecimal bd = new BigDecimal(Double.toString(value));
+            bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        } catch (final IllegalStateException e) {
+            throw new IllegalStateException("Something wrong");
+        }
     }
 }
