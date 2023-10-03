@@ -130,7 +130,28 @@ public class BasicCalcModelTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("sqrt(-1)", 0) );
         Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("123/0", 0) );
         Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("log(-1)", 0) );
-        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("lon(-1)", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("ln(-1)", 0) );
+    }
+
+    @Test
+    public void branchesTest() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult(")(", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("()", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("(.)", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("(", 0) );
+    }
+
+    @Test
+    public void wrongExpression() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("sin2.", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("^7", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("acosacos", 0) );
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("...", 0) );
+    }
+
+    @Test
+    public void strange() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> calc.getResult("-asin(4)", 0) );
     }
 
     @Test

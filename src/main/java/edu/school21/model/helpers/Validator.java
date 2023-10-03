@@ -18,15 +18,19 @@ public class Validator {
     private static void BracketCountCheck(final String rawData) {
         if (rawData.chars().asDoubleStream().filter(s -> s == '(').count()
                 != rawData.chars().asDoubleStream().filter(s -> s == ')').count()) {
-            throw new IllegalArgumentException("Branches");
+            throw new IllegalArgumentException("Wrong amount of branches");
         }
     }
 
     private static void EmptyPlaceInBracketsCheck(final String rawData) {
-        for (int i = 0; i < rawData.length(); i++) {
-            if (rawData.charAt(i) == '(' && rawData.charAt(i+1) == ')') {
-                throw new IllegalArgumentException("Empty branch");
+        try {
+            for (int i = 0; i < rawData.length(); i++) {
+                if (rawData.charAt(i) == '(' && rawData.charAt(i+1) == ')') {
+                    throw new IllegalArgumentException("Empty branch");
+                }
             }
+        } catch (final IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Wrong place of branches");
         }
     }
 }
