@@ -106,7 +106,7 @@ public class DepositCalcModel {
             }
         });
         deleteList.forEach(list::remove);
-        return new Pair(index.get(), add.get());
+        return new Pair<>(index.get(), add.get());
     }
 
     private void checkCapitalisation(final PeriodType capitalisationPeriod) {
