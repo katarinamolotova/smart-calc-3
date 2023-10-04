@@ -51,7 +51,7 @@ public class DepositViewModel implements ChildViewModel {
     @Override
     public void updateStyle() {
         anchorPane.getStylesheets().clear();
-        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
+        anchorPane.getStylesheets().add(Settings.STYLESHEET);
     }
 
     @Override

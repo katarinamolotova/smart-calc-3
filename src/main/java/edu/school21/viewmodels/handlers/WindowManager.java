@@ -1,9 +1,7 @@
 package edu.school21.viewmodels.handlers;
 
-import edu.school21.Main;
 import edu.school21.enums.ScreenType;
 import edu.school21.viewmodels.*;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,15 +10,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class WindowManager {
 
-    private AnchorPane anchorPane;
+    private final AnchorPane anchorPane;
     private Stage basicStage;
     private Stage aboutStage;
     private Stage creditStage;
@@ -32,7 +27,6 @@ public class WindowManager {
     private SettingsViewModel settingsViewModel;
 
     private final Settings settings;
-    private final Logger log = LogManager.getRootLogger();
 
     private ScreenType currentType = ScreenType.BASIC;
 
@@ -141,7 +135,7 @@ public class WindowManager {
         settings.setStyleSheetFromSettings();
 
         anchorPane.getStylesheets().clear();
-        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
+        anchorPane.getStylesheets().add(Settings.STYLESHEET);
 
         updateChildStyleIfNotNull(settingsViewModel);
         updateChildStyleIfNotNull(creditViewModel);
