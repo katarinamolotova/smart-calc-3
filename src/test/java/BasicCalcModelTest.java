@@ -9,14 +9,14 @@ import java.util.Locale;
 public class BasicCalcModelTest {
 
   BasicCalcModel calc = new BasicCalcModel();
-  static final int AROUNDVAR = 7;
+  static final int AROUND_VAR = 7;
 
   private static double round(double value) {
-    if (AROUNDVAR < 0) {
+    if (AROUND_VAR < 0) {
       throw new IllegalArgumentException();
     }
     BigDecimal bd = new BigDecimal(Double.toString(value));
-    bd = bd.setScale(AROUNDVAR, RoundingMode.HALF_UP);
+    bd = bd.setScale(AROUND_VAR, RoundingMode.HALF_UP);
     return bd.doubleValue();
   }
 
