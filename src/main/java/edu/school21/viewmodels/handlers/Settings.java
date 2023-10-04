@@ -5,10 +5,12 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class Settings {
-    public static final String STYLESHEET_FILE_NAME = "settings/settings.css";
-    public static final File STYLESHEET_FILE = new File(STYLESHEET_FILE_NAME);
-    private static final String STYLE_TEMPLATE_FILE_NAME = "settings/settings_template.txt";
-    private static final String STYLE_SETTINGS_FILE_NAME = "settings/settings.properties";
+    private static final String DIR = "settings" + File.separator;
+    public static final String STYLESHEET_FILE_NAME = DIR + "settings.css";
+    private static final File STYLESHEET_FILE = new File(STYLESHEET_FILE_NAME);
+    public static final String STYLESHEET = "file:///" + STYLESHEET_FILE.getAbsolutePath().replace("\\", "/");
+    private static final String STYLE_TEMPLATE_FILE_NAME = DIR + "settings_template.txt";
+    private static final String STYLE_SETTINGS_FILE_NAME = DIR + "settings.properties";
 
     private final Properties properties;
     private String styleTemplate;

@@ -4,7 +4,6 @@ import edu.school21.enums.RotationPeriod;
 import edu.school21.enums.ScreenType;
 import edu.school21.model.BasicCalcModel;
 import edu.school21.viewmodels.handlers.History;
-import edu.school21.viewmodels.handlers.Settings;
 import edu.school21.viewmodels.handlers.WindowManager;
 import edu.school21.viewmodels.helpers.Validator;
 import javafx.collections.FXCollections;
@@ -17,8 +16,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-import java.math.BigDecimal;
 
 public class BasicViewModel {
     public Label minLabel;
@@ -34,7 +31,7 @@ public class BasicViewModel {
     public RadioMenuItem dailyRadioItem;
     public RadioMenuItem monthlyRadioItem;
     public ToggleGroup period;
-    public LineChart graph;
+    public LineChart<Double, Double> graph;
 
     private WindowManager windowManager;
     private History history;
@@ -105,10 +102,10 @@ public class BasicViewModel {
         double step = (Math.abs(xBegin) + Math.abs(xEnd)) / 100.0;
 
         graph.getData().clear();
-        graph.getData().add(new XYChart.Series<>(FXCollections.observableArrayList()));
+        graph.getData().add(new XYChart.Series<>(expression, FXCollections.observableArrayList()));
         for (double xResult = xBegin; xResult <= xEnd; xResult += step) {
             double yResult = basicCalcModel.getResult(expression , xResult);
-            ((XYChart.Series) graph.getData().get(0)).getData().addAll(new XYChart.Data<>(xResult, yResult));
+            (graph.getData().get(0)).getData().add(new XYChart.Data<>(xResult, yResult));
         }
 
         history.logInfo("Result is graph");

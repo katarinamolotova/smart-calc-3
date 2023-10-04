@@ -2,7 +2,6 @@ package edu.school21;
 
 import edu.school21.enums.ScreenType;
 import edu.school21.viewmodels.BasicViewModel;
-import edu.school21.viewmodels.handlers.Settings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Locale;
 

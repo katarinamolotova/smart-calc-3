@@ -2,7 +2,6 @@
 import edu.school21.enums.PeriodType;
 import edu.school21.enums.TermType;
 import edu.school21.model.DepositCalcModel;
-import org.apache.logging.log4j.core.util.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
