@@ -2,6 +2,7 @@ package edu.school21.model;
 
 import edu.school21.enums.CreditType;
 import edu.school21.enums.TermType;
+import java.util.function.Function;
 import lombok.Getter;
 
 import java.util.ArrayList;
