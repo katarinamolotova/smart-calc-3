@@ -1,14 +1,12 @@
 package edu.school21.enums;
 
-import java.util.Objects;
-
 public enum CreditType {
     ANNUITY("Аннуитетный"),
     DIFFERENTIATED("Дифференцированный");
 
     private final String name;
 
-    CreditType(String name) {
+    CreditType(final String name) {
         this.name = name;
     }
 

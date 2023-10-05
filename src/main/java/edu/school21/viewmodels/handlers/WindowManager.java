@@ -1,9 +1,7 @@
 package edu.school21.viewmodels.handlers;
 
-import edu.school21.Main;
 import edu.school21.enums.ScreenType;
 import edu.school21.viewmodels.*;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,15 +10,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class WindowManager {
 
-    private AnchorPane anchorPane;
+    private final AnchorPane anchorPane;
     private Stage basicStage;
     private Stage aboutStage;
     private Stage creditStage;
@@ -32,9 +27,6 @@ public class WindowManager {
     private SettingsViewModel settingsViewModel;
 
     private final Settings settings;
-    private final Logger log = LogManager.getRootLogger();
-
-    private ScreenType currentType = ScreenType.BASIC;
 
     public WindowManager(
             final AnchorPane anchorPane,
@@ -54,14 +46,13 @@ public class WindowManager {
         } else if (newType == ScreenType.SETTINGS) {
             openSettingsWindow();
         } else {
-            openCommonWindow(newType, currentType);
+            openCommonWindow(newType);
         }
     }
 
     private void openAboutWindow() {
         if (aboutStage == null) {
             aboutStage = createStage(ScreenType.ABOUT);
-            aboutStage.initOwner(basicStage);
         }
         aboutStage.show();
     }
@@ -69,26 +60,18 @@ public class WindowManager {
     private void openSettingsWindow() {
         if (settingsStage == null) {
             settingsStage = createStage(ScreenType.SETTINGS);
-            settingsStage.initModality(Modality.APPLICATION_MODAL);
-            settingsStage.initOwner(basicStage);
             settingsViewModel.setWindowManager(this);
         }
         settingsViewModel.setSettingFromProperties(settings);
         settingsStage.show();
     }
 
-    private void openCommonWindow(final ScreenType newType, final ScreenType oldType) {
-        final Stage oldStage = getStageByScreenType(oldType);
+    private void openCommonWindow(final ScreenType newType) {
         Stage newStage = getStageByScreenType(newType);
         if (newStage == null) {
             newStage = createStage(newType);
-            newStage.initOwner(basicStage);
         }
-        currentType = newType;
-        if (oldStage != null) {
-            oldStage.hide();
-            newStage.show();
-        }
+        newStage.show();
     }
 
     public static void showErrorMessage(final String message) {
@@ -102,7 +85,7 @@ public class WindowManager {
      * Закрывает все приложение, если было закрыто одно из основных окон
      */
     public void closeWindow() {
-        final Stage stage = getStageByScreenType(currentType);
+        final Stage stage = getStageByScreenType(ScreenType.BASIC);
         if (stage != null) {
             stage.close();
         }
@@ -141,7 +124,7 @@ public class WindowManager {
         settings.setStyleSheetFromSettings();
 
         anchorPane.getStylesheets().clear();
-        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
+        anchorPane.getStylesheets().add(Settings.STYLESHEET);
 
         updateChildStyleIfNotNull(settingsViewModel);
         updateChildStyleIfNotNull(creditViewModel);
@@ -174,6 +157,8 @@ public class WindowManager {
 
         final Stage stage = new Stage();
         stage.setResizable(false);
+        stage.initOwner(basicStage);
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle(type.getTitle());
         stage.setScene(new Scene(root));
         setStageByScreenType(type, stage);

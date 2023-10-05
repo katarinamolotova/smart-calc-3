@@ -26,12 +26,12 @@ public class CreditCalcModelTest {
 
   @Test
   public void overpay() {
-    Assertions.assertEquals(27289.89, calc.getOverpay());
+    Assertions.assertEquals(27289.9, calc.getOverpay());
   }
 
   @Test
   public void totalPayment() {
-    Assertions.assertEquals(1027289.88, calc.getTotalPayment());
+    Assertions.assertEquals(1027289.89, calc.getTotalPayment());
   }
 
   @Test

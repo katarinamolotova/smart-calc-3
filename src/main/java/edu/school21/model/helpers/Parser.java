@@ -40,7 +40,7 @@ public class Parser {
       this.polishNotation.add(new Pair<>("num", number.doubleValue()));
       isUnary = false;
     } catch (ParseException e) {
-      throw new RuntimeException("Something wrong");
+      throw new RuntimeException("Error: Something wrong");
     }
     return index + (shiftNumber(str) - 1);
   }
@@ -142,27 +142,27 @@ public class Parser {
 
   String getOperations(final String str) {
     String op = " ";
-      if (str.indexOf("sin(") == 0) {
-          op = "sin";
-      } else if (str.indexOf("cos(") == 0) {
-          op = "cos";
-      } else if (str.indexOf("tan(") == 0) {
-          op = "tan";
-      } else if (str.indexOf("acos(") == 0) {
-          op = "acos";
-      } else if (str.indexOf("asin(") == 0) {
-          op = "asin";
-      } else if (str.indexOf("atan(") == 0) {
-          op = "atan";
-      } else if (str.indexOf("sqrt(") == 0) {
-          op = "sqrt";
-      } else if (str.indexOf("ln(") == 0) {
-          op = "ln";
-      } else if (str.indexOf("log(") == 0) {
-          op = "log";
-      } else if (str.indexOf("mod") == 0) {
-          op = "mod";
-      }
+    if (str.indexOf("sin(") == 0) {
+      op = "sin";
+    } else if (str.indexOf("cos(") == 0) {
+      op = "cos";
+    } else if (str.indexOf("tan(") == 0) {
+      op = "tan";
+    } else if (str.indexOf("acos(") == 0) {
+      op = "acos";
+    } else if (str.indexOf("asin(") == 0) {
+      op = "asin";
+    } else if (str.indexOf("atan(") == 0) {
+      op = "atan";
+    } else if (str.indexOf("sqrt(") == 0) {
+      op = "sqrt";
+    } else if (str.indexOf("ln(") == 0) {
+      op = "ln";
+    } else if (str.indexOf("log(") == 0) {
+      op = "log";
+    } else if (str.indexOf("mod") == 0) {
+      op = "mod";
+    }
     return op;
   }
 

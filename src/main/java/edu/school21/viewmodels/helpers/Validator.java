@@ -84,7 +84,7 @@ public class Validator {
         try {
             final String tempValue = (value.isEmpty() || value.equals("-")) ? "0" : value;
             number = Double.parseDouble(tempValue);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             return false;
         }
         return number >= min && number <= max;

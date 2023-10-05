@@ -22,12 +22,10 @@ public class CreditViewModel implements ChildViewModel {
     public TextField overPay;
     public TextField totalPayment;
 
-    private CreditCalcModel creditCalcModel;
-
     @Override
     public void updateStyle() {
         anchorPane.getStylesheets().clear();
-        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
+        anchorPane.getStylesheets().add(Settings.STYLESHEET);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class CreditViewModel implements ChildViewModel {
     }
 
     public void clickCalculateButton() {
-        creditCalcModel = new CreditCalcModel();
+        CreditCalcModel creditCalcModel = new CreditCalcModel();
         creditCalcModel.calculate(
                 getCreditType(),
                 Double.parseDouble(commonSumTextField.getText()),

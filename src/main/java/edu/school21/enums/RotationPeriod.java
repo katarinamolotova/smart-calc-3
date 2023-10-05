@@ -6,9 +6,9 @@ public enum RotationPeriod {
     DAILY("Daily"),
     MONTHLY("Monthly");
 
-    final private String name;
+    private final String name;
 
-    RotationPeriod(String name) {
+    RotationPeriod(final String name) {
         this.name = name;
     }
 

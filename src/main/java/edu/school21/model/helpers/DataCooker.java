@@ -8,7 +8,7 @@ public class DataCooker {
 
   private static final String REGEX = "[-+]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][-+]?\\d+)";
 
-  public static String DataCook(String rawData, double xValue) {
+  public static String DataCook(final String rawData, final double xValue) {
     String temp = replaceValueX(rawData, xValue);
     temp = exponentialEntryReplacement(temp);
     temp = insertMultiple(temp);

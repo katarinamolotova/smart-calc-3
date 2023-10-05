@@ -10,7 +10,7 @@ public enum ScreenType {
     private final String fileName;
     private final String title;
 
-    ScreenType(String fileName, String title) {
+    ScreenType(final String fileName, final String title) {
         this.fileName = fileName;
         this.title = title;
     }

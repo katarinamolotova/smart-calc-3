@@ -18,14 +18,14 @@ public class SettingsViewModel implements ChildViewModel {
 
     private WindowManager windowManager;
 
-    public void setWindowManager(WindowManager windowManager) {
+    public void setWindowManager(final WindowManager windowManager) {
         this.windowManager = windowManager;
     }
 
     @Override
     public void updateStyle() {
         anchorPane.getStylesheets().clear();
-        anchorPane.getStylesheets().add("file:///" + Settings.STYLESHEET_FILE.getAbsolutePath().replace("\\", "/"));
+        anchorPane.getStylesheets().add(Settings.STYLESHEET);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class SettingsViewModel implements ChildViewModel {
         updateStyle();
     }
 
-    public void setSettingFromProperties(Settings settings) {
+    public void setSettingFromProperties(final Settings settings) {
         backgroundColor.setValue(Color.valueOf(settings.getBackgroundColor()));
         buttonBackgroundColor.setValue(Color.valueOf(settings.getButtonBackgroundColor()));
         buttonTextColor.setValue(Color.valueOf(settings.getButtonTextColor()));
@@ -55,8 +55,8 @@ public class SettingsViewModel implements ChildViewModel {
         windowManager.closeSettingsViewAndUpdate();
     }
 
-    private String getColor(ColorPicker picker) {
-        String color = picker.getValue().toString();
+    private String getColor(final ColorPicker picker) {
+        final String color = picker.getValue().toString();
         return "#" + color.substring(2, color.length() - 2);
     }
 }

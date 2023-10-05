@@ -22,11 +22,11 @@ public class HistoryWrapper {
         return periodRotation == null ? RotationPeriod.HOURLY.getName() : periodRotation;
     }
 
-    public void setHistory(List<String> history) {
+    public void setHistory(final List<String> history) {
         this.history = history;
     }
 
-    public void setPeriodRotation(String periodRotation) {
+    public void setPeriodRotation(final String periodRotation) {
         this.periodRotation = periodRotation;
     }
 }
